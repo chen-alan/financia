@@ -170,10 +170,11 @@ public class DisplayObject {
 			applyTransformations(g2d);
 
 			/* Actually draw the image, perform the pivot point translation here */
-			g2d.drawImage(displayImage, this.pivotPoint.x, this.pivotPoint.y,
-					(int) (getUnscaledWidth()),
-					(int) (getUnscaledHeight()), null);
-
+			if (this.visible) {
+				g2d.drawImage(displayImage, this.pivotPoint.x, this.pivotPoint.y,
+						(int) (getUnscaledWidth()),
+						(int) (getUnscaledHeight()), null);
+			}
 			/*
 			 * undo the transformations so this doesn't affect other display
 			 * objects

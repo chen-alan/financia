@@ -59,11 +59,11 @@ public class LabOneGame extends Game{
 					mario.getPivotPoint().y + 5));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_J)) {
-			mario.setPivotPoint(new Point(mario.getPivotPoint().x + 5,
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x - 5,
 					mario.getPivotPoint().y));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_L)) {
-			mario.setPivotPoint(new Point(mario.getPivotPoint().x - 5,
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x + 5,
 					mario.getPivotPoint().y));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_W)) {
@@ -77,22 +77,26 @@ public class LabOneGame extends Game{
 			mario.setVisible(!mario.getVisible());
 		}
 
-		if(pressedKeys.contains(KeyEvent.VK_Z)){
-			mario.setOldAlpha(mario.getAlpha());
-			mario.setAlpha(mario.getAlpha()-0.05f);
+		if(pressedKeys.contains(KeyEvent.VK_Z)) {
+			if (mario.getAlpha() >= 0.01f) {
+				mario.setOldAlpha(mario.getAlpha());
+				mario.setAlpha(mario.getAlpha() - 0.01f);
+			}
 		}
 
-		if(pressedKeys.contains(KeyEvent.VK_X)){
-			mario.setOldAlpha(mario.getAlpha());
-			mario.setAlpha(mario.getAlpha()+0.05f);
+		if(pressedKeys.contains(KeyEvent.VK_X)) {
+			if (mario.getAlpha() <= 0.99f) {
+				mario.setOldAlpha(mario.getAlpha());
+				mario.setAlpha(mario.getAlpha() + 0.01f);
+			}
 		}
 
 		if(pressedKeys.contains(KeyEvent.VK_A)){
-			mario.setScale(mario.getScale()-0.5);
+			mario.setScale(mario.getScale() + 0.01);
 		}
 
 		if(pressedKeys.contains(KeyEvent.VK_S)){
-			mario.setScale(mario.getScale()+0.5);
+			mario.setScale(mario.getScale() - 0.0);
 		}
 
 	}
