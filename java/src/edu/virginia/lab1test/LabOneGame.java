@@ -15,14 +15,14 @@ public class LabOneGame extends Game{
 
 	/* Create a sprite object for our game. We'll use mario */
 	Sprite mario = new Sprite("Mario", "Mario.png");
-	
+
 	/**
 	 * Constructor. See constructor in Game.java for details on the parameters given
 	 * */
 	public LabOneGame() {
 		super("Lab One Test Game", 500, 300);
 	}
-	
+
 	/**
 	 * Engine will automatically call this update method once per frame and pass to us
 	 * the set of keys (as strings) that are currently being pressed down
@@ -30,7 +30,7 @@ public class LabOneGame extends Game{
 	@Override
 	public void update(ArrayList<Integer> pressedKeys){
 		super.update(pressedKeys);
-		
+
 		/* Make sure mario is not null. Sometimes Swing can auto cause an extra frame to go before everything is initialized */
 		if(mario != null) mario.update(pressedKeys);
 
@@ -51,20 +51,20 @@ public class LabOneGame extends Game{
 					mario.getPosition().y));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_I)) {
-			mario.setPivotPoint(new Point(mario.getPosition().x,
-					mario.getPosition().y - 5));
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x,
+					mario.getPivotPoint().y - 5));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_K)) {
-			mario.setPivotPoint(new Point(mario.getPosition().x,
-					mario.getPosition().y + 5));
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x,
+					mario.getPivotPoint().y + 5));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_J)) {
-			mario.setPivotPoint(new Point(mario.getPosition().x + 5,
-					mario.getPosition().y));
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x + 5,
+					mario.getPivotPoint().y));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_L)) {
-			mario.setPivotPoint(new Point(mario.getPosition().x - 5,
-					mario.getPosition().y));
+			mario.setPivotPoint(new Point(mario.getPivotPoint().x - 5,
+					mario.getPivotPoint().y));
 		}
 		if (pressedKeys.contains(KeyEvent.VK_W)) {
 			mario.setRotation(5);
@@ -72,8 +72,31 @@ public class LabOneGame extends Game{
 		if (pressedKeys.contains(KeyEvent.VK_Q)) {
 			mario.setRotation(-5);
 		}
+
+		if(pressedKeys.contains(KeyEvent.VK_V)){
+			mario.setVisible(!mario.getVisible());
+		}
+
+		if(pressedKeys.contains(KeyEvent.VK_Z)){
+			mario.setOldAlpha(mario.getAlpha());
+			mario.setAlpha(mario.getAlpha()-0.05f);
+		}
+
+		if(pressedKeys.contains(KeyEvent.VK_X)){
+			mario.setOldAlpha(mario.getAlpha());
+			mario.setAlpha(mario.getAlpha()+0.05f);
+		}
+
+		if(pressedKeys.contains(KeyEvent.VK_A)){
+			mario.setScale(mario.getScale()-0.5);
+		}
+
+		if(pressedKeys.contains(KeyEvent.VK_S)){
+			mario.setScale(mario.getScale()+0.5);
+		}
+
 	}
-	
+
 	/**
 	 * Engine automatically invokes draw() every frame as well. If we want to make sure mario gets drawn to
 	 * the screen, we need to make sure to override this method and call mario's draw method.
@@ -81,7 +104,7 @@ public class LabOneGame extends Game{
 	@Override
 	public void draw(Graphics g){
 		super.draw(g);
-		
+
 		/* Same, just check for null in case a frame gets thrown in before Mario is initialized */
 		if(mario != null) mario.draw(g);
 	}

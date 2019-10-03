@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 /**
  * A very basic display object for a java based gaming engine
- * 
+ *
  * */
 public class DisplayObject {
 
@@ -27,8 +27,7 @@ public class DisplayObject {
 	private boolean visible;
 	private float alpha;
 	private float oldAlpha;
-	private double scaleX;
-	private double scaleY;
+	private double scale;
 
 	/**
 	 * Constructors: can pass in the id OR the id and image's file path and
@@ -39,6 +38,10 @@ public class DisplayObject {
 		this.position = new Point(0, 0);
 		this.pivotPoint = new Point(0, 0);
 		this.rotation = 0;
+		this.alpha = 1.0f;
+		this.oldAlpha = 0.0f;
+		this.scale = 1.0;
+		this.visible = true;
 	}
 
 	public DisplayObject(String id, String fileName) {
@@ -47,6 +50,10 @@ public class DisplayObject {
 		this.position = new Point(0, 0);
 		this.pivotPoint = new Point(0, 0);
 		this.rotation = 0;
+		this.alpha = 1.0f;
+		this.oldAlpha = 0.0f;
+		this.scale = 1.0;
+		this.visible = true;
 	}
 
 	public void setId(String id) {
@@ -70,6 +77,22 @@ public class DisplayObject {
 	public int getRotation() { return this.rotation; }
 
 	public void setRotation(int newRotation) { this.rotation += newRotation; }
+
+	public double getScale() { return this.scale; }
+
+	public void setScale(double x) { this.scale = x; }
+
+	public float getAlpha() { return this.alpha; }
+
+	public void setAlpha(float a) { this.alpha = a; }
+
+	public float getOldAlpha() { return this.oldAlpha; }
+
+	public void setOldAlpha(float a) { this.oldAlpha = a; }
+
+	public boolean getVisible() { return this.visible; }
+
+	public void setVisible(boolean x) { this.visible = x;}
 
 	/**
 	 * Returns the unscaled width and height of this display object
@@ -136,9 +159,9 @@ public class DisplayObject {
 	 * every frame.
 	 * */
 	public void draw(Graphics g) {
-		
+
 		if (displayImage != null) {
-			
+
 			/*
 			 * Get the graphics and apply this objects transformations
 			 * (rotation, etc.)
@@ -150,7 +173,7 @@ public class DisplayObject {
 			g2d.drawImage(displayImage, this.pivotPoint.x, this.pivotPoint.y,
 					(int) (getUnscaledWidth()),
 					(int) (getUnscaledHeight()), null);
-			
+
 			/*
 			 * undo the transformations so this doesn't affect other display
 			 * objects
@@ -166,12 +189,12 @@ public class DisplayObject {
 	protected void applyTransformations(Graphics2D g2d) {
 		g2d.translate(this.position.x, this.position.y);
 		g2d.rotate(Math.toRadians(this.getRotation()));
-//		g2d.scale(this.scaleX, this.scaleY);
-//		float curAlpha;
-//		this.oldAlpha = curAlpha = ((AlphaComposite)
-//				g2d.getComposite()).getAlpha();
-//		g2d.setComposite(AlphaComposite.getInstance(3, curAlpha *
-//				this.alpha));
+		g2d.scale(this.scale, this.scale);
+		float curAlpha;
+		this.oldAlpha = curAlpha = ((AlphaComposite)
+				g2d.getComposite()).getAlpha();
+		g2d.setComposite(AlphaComposite.getInstance(3, curAlpha *
+				this.alpha));
 	}
 
 	/**
@@ -181,8 +204,9 @@ public class DisplayObject {
 	protected void reverseTransformations(Graphics2D g2d) {
 		g2d.translate(-this.position.x, -this.position.y);
 		g2d.rotate(-Math.toRadians(this.getRotation()));
-//		g2d.setComposite(AlphaComposite.getInstance(3,
-//				this.oldAlpha));
+		g2d.scale(1/this.scale, 1/this.scale);
+		g2d.setComposite(AlphaComposite.getInstance(3,
+				this.oldAlpha));
 	}
 
 }
