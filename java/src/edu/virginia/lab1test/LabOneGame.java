@@ -1,6 +1,7 @@
 package edu.virginia.lab1test;
 
-import java.awt.Graphics;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import edu.virginia.engine.display.Game;
@@ -32,7 +33,45 @@ public class LabOneGame extends Game{
 		
 		/* Make sure mario is not null. Sometimes Swing can auto cause an extra frame to go before everything is initialized */
 		if(mario != null) mario.update(pressedKeys);
-		
+
+		if (pressedKeys.contains(KeyEvent.VK_UP)) {
+			mario.setPosition(new Point(mario.getPosition().x,
+					mario.getPosition().y - 5));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_DOWN)) {
+			mario.setPosition(new Point(mario.getPosition().x,
+					mario.getPosition().y + 5));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_LEFT)) {
+			mario.setPosition(new Point(mario.getPosition().x - 5,
+					mario.getPosition().y));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_RIGHT)) {
+			mario.setPosition(new Point(mario.getPosition().x + 5,
+					mario.getPosition().y));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_I)) {
+			mario.setPivotPoint(new Point(mario.getPosition().x,
+					mario.getPosition().y - 5));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_K)) {
+			mario.setPivotPoint(new Point(mario.getPosition().x,
+					mario.getPosition().y + 5));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_J)) {
+			mario.setPivotPoint(new Point(mario.getPosition().x + 5,
+					mario.getPosition().y));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_L)) {
+			mario.setPivotPoint(new Point(mario.getPosition().x - 5,
+					mario.getPosition().y));
+		}
+		if (pressedKeys.contains(KeyEvent.VK_W)) {
+			mario.setRotation(5);
+		}
+		if (pressedKeys.contains(KeyEvent.VK_Q)) {
+			mario.setRotation(-5);
+		}
 	}
 	
 	/**
