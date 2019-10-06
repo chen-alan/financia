@@ -96,7 +96,9 @@ public class LabOneGame extends Game{
 		}
 
 		if(pressedKeys.contains(KeyEvent.VK_S)){
-			mario.setScale(mario.getScale() - 0.0);
+			if (mario.getScale() >=0.01) {
+				mario.setScale(mario.getScale() - 0.01);
+			}
 		}
 
 	}

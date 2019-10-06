@@ -171,7 +171,8 @@ public class DisplayObject {
 
 			/* Actually draw the image, perform the pivot point translation here */
 			if (this.visible) {
-				g2d.drawImage(displayImage, this.pivotPoint.x, this.pivotPoint.y,
+				g2d.drawImage(displayImage, this.position.x,
+						this.position.y,
 						(int) (getUnscaledWidth()),
 						(int) (getUnscaledHeight()), null);
 			}
