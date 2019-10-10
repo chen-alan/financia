@@ -13,6 +13,9 @@ import edu.virginia.engine.display.Sprite;
  * */
 public class LabOneGame extends Game{
 
+	//counter for visibility toggle
+	private int counter;
+
 	/* Create a sprite object for our game. We'll use mario */
 	Sprite mario = new Sprite("Mario", "Mario.png");
 
@@ -21,12 +24,15 @@ public class LabOneGame extends Game{
 	 * */
 	public LabOneGame() {
 		super("Lab One Test Game", 500, 300);
+		counter = 1;
 	}
 
 	/**
 	 * Engine will automatically call this update method once per frame and pass to us
 	 * the set of keys (as strings) that are currently being pressed down
 	 * */
+
+
 	@Override
 	public void update(ArrayList<Integer> pressedKeys){
 		super.update(pressedKeys);
@@ -74,7 +80,13 @@ public class LabOneGame extends Game{
 		}
 
 		if(pressedKeys.contains(KeyEvent.VK_V)){
-			mario.setVisible(!mario.getVisible());
+			if(counter == 3) {
+				mario.setVisible(!mario.getVisible());
+				counter = 1;
+			}
+			else {
+				counter = counter + 1;
+			}
 		}
 
 		if(pressedKeys.contains(KeyEvent.VK_Z)) {

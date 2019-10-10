@@ -29,6 +29,7 @@ public class DisplayObject {
 	private float oldAlpha;
 	private double scale;
 
+
 	/**
 	 * Constructors: can pass in the id OR the id and image's file path and
 	 * position OR the id and a buffered image and position
