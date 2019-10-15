@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class AnimatedSprite extends Sprite {
 
-    private static final int DEFAULT_ANIMATION_SPEED = 0; // in ms
+    private static final int DEFAULT_ANIMATION_SPEED = 5; // in ms
     private ArrayList<Animation> animations;
     private String fileName;
     private ArrayList<BufferedImage> frames;
@@ -27,6 +27,12 @@ public class AnimatedSprite extends Sprite {
     }
 
     public Animation getAnimation(String id) {
+        for (Animation ani : animations ){
+            if (ani.getId().equals(id)){
+                return ani;
+            }
+        }
+        return null;
     }
 
     public void setAnimationSpeed(int newAnimationSpeed) {
@@ -43,6 +49,36 @@ public class AnimatedSprite extends Sprite {
         }
     }
 
+    public void initializeFrames(String folderName){
+
+    }
+
+    //ANIMATE METHODS
+    public void animate(int start, int end) {
+        this.startFrame = start;
+        this.endFrame = end;
+    }
+
+    public void animate(Animation ani) {
+        this.startFrame = ani.getStartFrame();
+        this.endFrame = ani.getEndFrame();
+    }
+
+    public void animate(String id) {
+        ani = this.getAnimation(id);
+        animate(ani);
+    }
+
+    //STOP ANIMATION METHODS
+    public void stopAnimation(int frame){
+
+    }
+
+    public void stopAnimation() {
+
+    }
+
+
     @Override
     public void draw(Graphics g) {
         if (playing && animationSpeed <= gameClock.getElapsedTime()) {
@@ -51,4 +87,6 @@ public class AnimatedSprite extends Sprite {
         }
         super.draw(g);
     }
+
+
 }
