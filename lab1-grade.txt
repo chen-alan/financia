@@ -1,0 +1,15 @@
+LAB 1
+
+25/25 points: Up, down, left, right arrow keys make Mario move up, down, left, right
+5/5 points: A & S keys scale Mario up and down respectively
+5/5 points: W & Q keys rotate Mario clockwise and counterclockwise respectively
+5/5 points: Z & X make Mario more and less transparent respectively
+4/5 points: V key toggles Mario’s visibility 
+	Only 2 points: Mario flickers when you press V
+5/5 points: I, J, K, L keys moves Mario’s pivot point (It’s okay if Mario moves if he’s already rotated)
+
+Final Grade: 49/50
+
+Comments:
+
+You lost points on the flickering visibility. I noticed you tried to fix it with the counter. However, your counter was very low, so only the fastest of pecks would work. It was a little out of bounds of normal keystroke speed to be a good fix. I recommend increasing your counter. 
