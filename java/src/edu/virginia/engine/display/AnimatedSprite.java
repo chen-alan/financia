@@ -2,9 +2,12 @@ package edu.virginia.engine.display;
 
 import edu.virginia.engine.util.GameClock;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.io.File;
 
 public class AnimatedSprite extends Sprite {
 
@@ -49,8 +52,20 @@ public class AnimatedSprite extends Sprite {
         }
     }
 
-    public void initializeFrames(String folderName){
-
+    public void initializeFrames(String spriteName){
+        File[] pictures= new File("resources"+File.separator+
+                "animations"+File.separator+spriteName).listFiles();
+        for(File pic: pictures){
+            BufferedImage picRead = null;
+            try {
+                picRead = ImageIO.read(pic);
+            }
+            catch (IOException e) {
+                System.out.println("[Error in DisplayObject.java:readImage] Could not read file ");
+                e.printStackTrace();
+            }
+            frames.add(picRead);
+        }
     }
 
     //ANIMATE METHODS
@@ -65,17 +80,18 @@ public class AnimatedSprite extends Sprite {
     }
 
     public void animate(String id) {
-        ani = this.getAnimation(id);
-        animate(ani);
+        animate(this.getAnimation(id));
     }
 
     //STOP ANIMATION METHODS
-    public void stopAnimation(int frame){
+    public void stopAnimation(int frame) {
+        this.currentFrame = frame;
+        this.playing = false;
 
     }
 
     public void stopAnimation() {
-
+        stopAnimation(0);
     }
 
 
