@@ -8,10 +8,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.File;
+import java.util.Arrays;
 
 public class AnimatedSprite extends Sprite {
 
-    private static final int DEFAULT_ANIMATION_SPEED = 5; // in ms
+    private static final int DEFAULT_ANIMATION_SPEED = 200; // in ms
     private ArrayList<Animation> animations;
     private String fileName;
     private ArrayList<BufferedImage> frames;
@@ -27,6 +28,9 @@ public class AnimatedSprite extends Sprite {
         this.setPosition(position);
         this.gameClock = new GameClock();
         this.animationSpeed = DEFAULT_ANIMATION_SPEED;
+        this.frames = new ArrayList<BufferedImage>();
+        this.animations = new ArrayList<Animation>();
+        this.playing = false;
     }
 
     public Animation getAnimation(String id) {
@@ -42,6 +46,10 @@ public class AnimatedSprite extends Sprite {
         this.animationSpeed = newAnimationSpeed;
     }
 
+    public int getAnimationSpeed() {
+        return this.animationSpeed;
+    }
+
     public void setAnimations(ArrayList<Animation> newAnimations) {
         this.animations = newAnimations;
     }
@@ -55,28 +63,39 @@ public class AnimatedSprite extends Sprite {
     public void initializeFrames(String spriteName){
         File[] pictures= new File("resources"+File.separator+
                 "animations"+File.separator+spriteName).listFiles();
-        for(File pic: pictures){
-            BufferedImage picRead = null;
+        Arrays.sort(pictures);
+        for(File pic : pictures){
+            //BufferedImage picRead = null;
             try {
-                picRead = ImageIO.read(pic);
+                BufferedImage picRead = ImageIO.read(pic);
+                frames.add(picRead);
             }
             catch (IOException e) {
                 System.out.println("[Error in DisplayObject.java:readImage] Could not read file ");
                 e.printStackTrace();
             }
-            frames.add(picRead);
         }
     }
 
     //ANIMATE METHODS
     public void animate(int start, int end) {
+        this.playing = true;
         this.startFrame = start;
         this.endFrame = end;
+        //if already in current animation, keep going
+        if (!(this.currentFrame >= startFrame && this.currentFrame <= endFrame)){
+            this.currentFrame = startFrame;
+        }
     }
 
     public void animate(Animation ani) {
+        this.playing = true;
         this.startFrame = ani.getStartFrame();
         this.endFrame = ani.getEndFrame();
+        //if already in current animation, keep going
+        if (!(this.currentFrame >= startFrame && this.currentFrame <= endFrame)){
+            this.currentFrame = startFrame;
+        }
     }
 
     public void animate(String id) {
@@ -85,23 +104,34 @@ public class AnimatedSprite extends Sprite {
 
     //STOP ANIMATION METHODS
     public void stopAnimation(int frame) {
-        this.currentFrame = frame;
         this.playing = false;
-
+        this.currentFrame = frame;
     }
 
     public void stopAnimation() {
-        stopAnimation(0);
+        this.playing = false;
+        stopAnimation(startFrame);
     }
 
 
     @Override
     public void draw(Graphics g) {
         if (playing && animationSpeed <= gameClock.getElapsedTime()) {
-            currentFrame++;
+            super.setImage(this.frames.get(currentFrame));
+            if (currentFrame == endFrame){
+                currentFrame = startFrame;
+            }
+            else{
+                currentFrame++;
+            }
+            super.draw(g);
             gameClock.resetGameClock();
         }
-        super.draw(g);
+        else{
+           super.setImage(this.frames.get(currentFrame));
+           super.draw(g);
+        }
+
     }
 
 
