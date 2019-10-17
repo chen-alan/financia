@@ -51,7 +51,7 @@ public class LabTwoGame extends Game{
         /* Make sure mario is not null. Sometimes Swing can auto cause an extra frame to go before everything is initialized */
         if(mario != null) mario.update(pressedKeys);
 
-        if (pressedKeys.isEmpty()) {
+        if (pressedKeys.isEmpty() && (mario != null)) {
             if (mario.isPlaying()) {
                 mario.stopAnimation();
             }
