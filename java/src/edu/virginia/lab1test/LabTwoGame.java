@@ -51,6 +51,12 @@ public class LabTwoGame extends Game{
         /* Make sure mario is not null. Sometimes Swing can auto cause an extra frame to go before everything is initialized */
         if(mario != null) mario.update(pressedKeys);
 
+        if (pressedKeys.isEmpty()) {
+            if (mario.isPlaying()) {
+                mario.stopAnimation();
+            }
+        }
+
         if (pressedKeys.contains(KeyEvent.VK_UP)) {
             mario.setPosition(new Point(mario.getPosition().x,
                     mario.getPosition().y - 1));
@@ -134,18 +140,6 @@ public class LabTwoGame extends Game{
             int currSpeed = mario.getAnimationSpeed();
             mario.setAnimationSpeed(currSpeed + 5);
         }
-
-        //STOPPING ANIMATION
-        //these below give a ton of errors but it still works..
-//        if (!(pressedKeys.contains(KeyEvent.VK_UP)) && !(pressedKeys.contains(KeyEvent.VK_DOWN))
-//        && !(pressedKeys.contains(KeyEvent.VK_LEFT)) && !(pressedKeys.contains(KeyEvent.VK_RIGHT))) {
-//            mario.stopAnimation();
-//        }
-//        if(pressedKeys.isEmpty()){
-//            mario.stopAnimation();
-//        }
-
-
     }
 
     /**

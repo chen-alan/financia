@@ -31,6 +31,13 @@ public class AnimatedSprite extends Sprite {
         this.frames = new ArrayList<BufferedImage>();
         this.animations = new ArrayList<Animation>();
         this.playing = false;
+        this.currentFrame = 0;
+        this.startFrame = 0;
+        this.endFrame = 0;
+    }
+
+    public boolean isPlaying() {
+        return this.playing;
     }
 
     public Animation getAnimation(String id) {
@@ -42,16 +49,16 @@ public class AnimatedSprite extends Sprite {
         return null;
     }
 
-    public void setAnimationSpeed(int newAnimationSpeed) {
-        this.animationSpeed = newAnimationSpeed;
+    public void setAnimations(ArrayList<Animation> newAnimations) {
+        this.animations = newAnimations;
     }
 
     public int getAnimationSpeed() {
         return this.animationSpeed;
     }
 
-    public void setAnimations(ArrayList<Animation> newAnimations) {
-        this.animations = newAnimations;
+    public void setAnimationSpeed(int newAnimationSpeed) {
+        this.animationSpeed = newAnimationSpeed;
     }
 
     public void initGameClock() {
