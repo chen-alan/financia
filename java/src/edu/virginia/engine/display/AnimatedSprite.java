@@ -123,7 +123,6 @@ public class AnimatedSprite extends Sprite {
         }
     }
 
-
     @Override
     public void draw(Graphics g) {
         if (playing && animationSpeed <= gameClock.getElapsedTime()) {
