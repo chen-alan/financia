@@ -113,11 +113,14 @@ public class AnimatedSprite extends Sprite {
     public void stopAnimation(int frame) {
         this.playing = false;
         this.currentFrame = frame;
+        super.setImage(this.frames.get(currentFrame));
     }
 
     public void stopAnimation() {
         this.playing = false;
-        stopAnimation(startFrame);
+        if (!(frames.isEmpty())){
+            stopAnimation(startFrame);
+        }
     }
 
 
@@ -131,13 +134,9 @@ public class AnimatedSprite extends Sprite {
             else{
                 currentFrame++;
             }
-            super.draw(g);
             gameClock.resetGameClock();
         }
-        else{
-           super.setImage(this.frames.get(currentFrame));
-           super.draw(g);
-        }
+        super.draw(g);
 
     }
 
