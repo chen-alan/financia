@@ -138,7 +138,7 @@ public class Game extends DisplayObject implements ActionListener, KeyListener {
 			this.draw(g);
 		} catch (Exception e) {
 			System.out
-					.println("Exception in nextFrame of game. Stopping game (no frames will be drawn anymore");
+					.println("Exception in nextFrame of game. Stopping game (no frames will be drawn anymore)");
 			stop();
 			e.printStackTrace();
 		}
@@ -174,7 +174,6 @@ public class Game extends DisplayObject implements ActionListener, KeyListener {
 		if(!pressedKeys.contains((Integer)e.getKeyCode()))
 			pressedKeys.add((Integer)e.getKeyCode());
 	}
-
 
 	@Override
 	public void keyReleased(KeyEvent e) {

@@ -17,7 +17,7 @@ public class LabOneGame extends Game{
 	private int counter;
 
 	/* Create a sprite object for our game. We'll use mario */
-	Sprite mario = new Sprite("Mario", "Mario.png");
+	 Sprite mario = new Sprite("Mario", "Mario.png");
 
 	/**
 	 * Constructor. See constructor in Game.java for details on the parameters given
