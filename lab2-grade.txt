@@ -1,0 +1,8 @@
+LAB 2
+
+85/85 points: At least one animation works
+15/15 points: There are animations of different speeds OR there is a way to change animation speed.
+
+Total Grade: 100/100
+
+Nice job! Very cute 4-way animation.
