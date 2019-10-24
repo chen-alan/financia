@@ -21,7 +21,6 @@ public class DisplayObject {
 	/* The image that is displayed by this object */
 	private BufferedImage displayImage;
 
-	/* LAB 1 content */
 	private Point position;
 	private Point pivotPoint;
 	private int rotation;
@@ -29,6 +28,7 @@ public class DisplayObject {
 	private float alpha;
 	private float oldAlpha;
 	private double scale;
+	private DisplayObject parent;
 
 
 	/**
@@ -44,6 +44,7 @@ public class DisplayObject {
 		this.oldAlpha = 0.0f;
 		this.scale = 1.0;
 		this.visible = true;
+		this.parent = null;
 	}
 
 	public DisplayObject(String id, String fileName) {
@@ -56,6 +57,19 @@ public class DisplayObject {
 		this.oldAlpha = 0.0f;
 		this.scale = 1.0;
 		this.visible = true;
+		this.parent = null;
+	}
+
+	public DisplayObject() {
+		this.setId(null);
+		this.position = new Point(0, 0);
+		this.pivotPoint = new Point(0, 0);
+		this.rotation = 0;
+		this.alpha = 1.0f;
+		this.oldAlpha = 0.0f;
+		this.scale = 1.0;
+		this.visible = true;
+		this.parent = null;
 	}
 
 	public void setId(String id) {
@@ -95,6 +109,50 @@ public class DisplayObject {
 	public boolean getVisible() { return this.visible; }
 
 	public void setVisible(boolean x) { this.visible = x;}
+
+	public DisplayObject getParent() { return this.parent; }
+
+	public void setParent(DisplayObject newParent) { this.parent = newParent;}
+
+	/**
+	 * given a point in the local coordinate system, return its corresponding point
+	 * in the global coordinate system
+	 * @param p
+	 * @return Point object with coordinates in global coordinate system
+	 */
+	public Point localToGlobal(Point p) {
+		if (this.parent == null) {
+			int globalX = (int)(this.position.getX());
+			int globalY = (int)(this.position.getY());
+			return new Point(globalX, globalY);
+		}
+
+		Point parentGlobalPosition = localToGlobal(this.parent.getPosition());
+		int globalX = (int)(parentGlobalPosition.getX() + p.getX());
+		int globalY = (int)(parentGlobalPosition.getY() + p.getY());
+
+		return new Point(globalX, globalY);
+	}
+
+	/**
+	 * given a point in the global coordinate system, return its corresponding point
+	 * in the DisplayObject's own coordinate system
+	 * @param p
+	 * @return Point object with coordinates in DisplayObject's own coordinate system
+	 */
+	public Point globalToLocal(Point p) {
+		if (this.parent == null) {
+			int localX = (int)(this.position.getX());
+			int localY = (int)(this.position.getY());
+			return new Point(localX, localY);
+		}
+
+		Point parentLocalPosition = globalToLocal(this.parent.getPosition());
+		int localX = (int)(p.getX() - parentLocalPosition.getX());
+		int localY = (int)(p.getY() - parentLocalPosition.getY());
+
+		return new Point(localX, localY);
+	}
 
 	/**
 	 * Returns the unscaled width and height of this display object
