@@ -1,5 +1,6 @@
 package edu.virginia.engine.display;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -14,6 +15,11 @@ public class Sprite extends DisplayObjectContainer {
 
 	public Sprite(String id, String imageFileName) {
 		super(id, imageFileName);
+	}
+
+	public Sprite(String id, String imageFileName, Point position){
+		super(id, imageFileName);
+		this.setPosition(position);
 	}
 	
 	@Override

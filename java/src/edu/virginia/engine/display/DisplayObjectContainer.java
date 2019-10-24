@@ -1,6 +1,8 @@
 package edu.virginia.engine.display;
 
 import edu.virginia.engine.display.DisplayObject;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 public class DisplayObjectContainer extends DisplayObject {
@@ -9,9 +11,13 @@ public class DisplayObjectContainer extends DisplayObject {
 
     public DisplayObjectContainer(String id) {
         super(id);
+        this.children = new ArrayList<>();
     }
 
-    public DisplayObjectContainer(String id, String imageFileName) { super(id, imageFileName); }
+    public DisplayObjectContainer(String id, String imageFileName) {
+        super(id, imageFileName);
+        this.children = new ArrayList<>();
+    }
 
     public DisplayObjectContainer(ArrayList<DisplayObject> newChildren) {
         this.children = newChildren;
@@ -23,6 +29,7 @@ public class DisplayObjectContainer extends DisplayObject {
      * @return true if this.children changed as a result of the call
      */
     public boolean addChild(DisplayObject child) {
+        child.setParent(this);
         return this.children.add(child);
     }
 
@@ -81,6 +88,28 @@ public class DisplayObjectContainer extends DisplayObject {
     public ArrayList<DisplayObject> getChildren() {
         return this.children;
     }
+
+    @Override
+    public void draw(Graphics g){
+        super.draw(g); //Draw myself
+        Graphics2D g2d = (Graphics2D) g;
+
+        applyTransformations(g2d); //apply my transformations to my children
+
+        if (this.children != null) {
+            for (DisplayObject child : this.children) {
+                System.out.println("child is: " + child.getId());
+//                child.setPosition(child.localToGlobal(child.getPosition()));
+                System.out.println("child position in global is: " + child.getPosition());
+                child.draw(g);
+//                child.setPosition(child.globalToLocal(child.getPosition()));
+                System.out.println("child position in local is: " + child.getPosition());
+            }
+        }
+
+        reverseTransformations(g2d);
+    }
+
 
 }
 
