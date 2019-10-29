@@ -5,6 +5,7 @@ import edu.virginia.engine.display.Game;
 import edu.virginia.engine.display.Sprite;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class LabThreeSimulator extends Game {
     private int earthRadius;
     private int earthMoonRadius;
     private int jupiterRadius;
+    private boolean cw;
     private static final double DEG_TO_RAD = Math.PI / 180;
     Sprite sun = new Sprite("Sun", "solarSystem" + File.separator+"sun.png", new Point(300, 300));
     Sprite earth = new Sprite("Earth", "solarSystem" + File.separator+"earth.png");
@@ -28,6 +30,7 @@ public class LabThreeSimulator extends Game {
         super("Lab Three Simulator", 800,800);
 
         this.tick = 0;
+        this.cw = true;
 
         /*add children*/
         sun.addChild(earth);
@@ -56,26 +59,54 @@ public class LabThreeSimulator extends Game {
 
         System.out.println(pressedKeys);
 
+        if (pressedKeys.contains(KeyEvent.VK_S)) {
+            this.cw = true;
+        }
+
+        if (pressedKeys.contains(KeyEvent.VK_A)) {
+            this.cw = false;
+        }
         if(earth != null) {
             earth.update(pressedKeys);
-            double newX = (earth.getParentPosition().x - this.earthRadius) * Math.cos(this.tick * DEG_TO_RAD * 2) + 30;
-            double newY = (earth.getParentPosition().y - this.earthRadius) * Math.sin(this.tick * DEG_TO_RAD * 2) + 10;
+            double newX, newY;
+            if (this.cw) {
+                newY = (earth.getParentPosition().y - this.earthRadius) * Math.sin(this.tick * DEG_TO_RAD * 2) + 10;
+                newX = (earth.getParentPosition().x - this.earthRadius) * Math.cos(this.tick * DEG_TO_RAD * 2) + 30;
+            }
+            else {
+                newY = (earth.getParentPosition().y - this.earthRadius) * Math.cos(this.tick * DEG_TO_RAD * 2) + 10;
+                newX = (earth.getParentPosition().x - this.earthRadius) * Math.sin(this.tick * DEG_TO_RAD * 2) + 30;
+            }
             Point newPosition = new Point((int) newX, (int) newY);
             earth.setPosition(newPosition);
         }
 
         if(earth != null) {
             earthMoon.update(pressedKeys);
-            double newX = (this.earthMoonRadius) * Math.cos(this.tick * DEG_TO_RAD * 6) + 20;
-            double newY = (this.earthMoonRadius) * Math.sin(this.tick * DEG_TO_RAD * 6) + 10;
+            double newX, newY;
+            if (this.cw) {
+                newY = (this.earthMoonRadius) * Math.sin(this.tick * DEG_TO_RAD * 6) + 20;
+                newX = (this.earthMoonRadius) * Math.cos(this.tick * DEG_TO_RAD * 6) + 10;
+            }
+            else {
+                newY = (this.earthMoonRadius) * Math.cos(this.tick * DEG_TO_RAD * 6) + 20;
+                newX = (this.earthMoonRadius) * Math.sin(this.tick * DEG_TO_RAD * 6) + 10;
+            }
             Point newPosition = new Point((int) newX, (int) newY);
             earthMoon.setPosition(newPosition);
         }
 
         if(jupiter != null) {
             jupiter.update(pressedKeys);
-            double newX = (jupiter.getParentPosition().x - this.jupiterRadius - 200) * Math.cos(this.tick / 2 * DEG_TO_RAD) + 30;
-            double newY = (jupiter.getParentPosition().y - this.jupiterRadius - 200) * Math.sin(this.tick / 2 * DEG_TO_RAD) + 30;
+            double newX, newY;
+            if (this.cw) {
+                newY = (jupiter.getParentPosition().y - this.jupiterRadius - 200) * Math.sin(this.tick / 2 * DEG_TO_RAD * 2) + 30;
+                newX = (jupiter.getParentPosition().x - this.jupiterRadius - 200) * Math.cos(this.tick / 2 * DEG_TO_RAD * 2) + 30;
+            }
+            else {
+                newY = (jupiter.getParentPosition().y - this.jupiterRadius - 200) * Math.cos(this.tick / 2 * DEG_TO_RAD * 2) + 30;
+                newX = (jupiter.getParentPosition().x - this.jupiterRadius - 200) * Math.sin(this.tick / 2 * DEG_TO_RAD * 2) + 30;
+            }
             Point newPosition = new Point((int) newX, (int) newY);
             jupiter.setPosition(newPosition);
         }
