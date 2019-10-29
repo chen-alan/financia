@@ -50,10 +50,9 @@ public class LabThreeSimulator extends Game {
         if(earth != null) {
             earth.update(pressedKeys);
             tick++;
-            System.out.println(earth.getPosition());
             double newX = (earth.getParentPosition().x - earth.getPosition().x) * Math.cos(this.tick * DEG_TO_RAD);
             double newY = (earth.getParentPosition().y - earth.getPosition().y) * Math.sin(this.tick * DEG_TO_RAD);
-//            System.out.println("newX: " + newX + "\tnewY: " + newY);
+            System.out.println("newX: " + newX + "\tnewY: " + newY);
         }
 
     }
