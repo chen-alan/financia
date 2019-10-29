@@ -18,7 +18,7 @@ public class LabThreeSimulator extends Game {
     private int jupiterRadius;
     private boolean cw;
     private static final double DEG_TO_RAD = Math.PI / 180;
-    Sprite sun = new Sprite("Sun", "solarSystem" + File.separator+"sun.png", new Point(300, 300));
+    Sprite sun = new Sprite("Sun", "solarSystem" + File.separator+"sun.png", new Point(336, 336));
     Sprite earth = new Sprite("Earth", "solarSystem" + File.separator+"earth.png");
     Sprite jupiter = new Sprite("Jupiter", "solarSystem" + File.separator+"jupiter.png");
     Sprite earthMoon = new Sprite("EarthMoon", "solarSystem" + File.separator+"earthMoon.png");
@@ -41,7 +41,7 @@ public class LabThreeSimulator extends Game {
         this.earthRadius = earth.getPosition().x;
         earthMoon.setPosition(earthMoon.globalToLocal(new Point(500, 500)));
         this.earthMoonRadius = earthMoon.getPosition().x;
-        jupiter.setPosition(jupiter.globalToLocal(new Point(700, 700)));
+        jupiter.setPosition(jupiter.globalToLocal(new Point(800, 800)));
         this.jupiterRadius = jupiter.getPosition().x;
 
     }
@@ -57,7 +57,39 @@ public class LabThreeSimulator extends Game {
         super.update(pressedKeys);
         tick++;
 
-        System.out.println(pressedKeys);
+       // System.out.println(pressedKeys);
+        if(sun != null) sun.update(pressedKeys);
+
+        if (pressedKeys.contains(KeyEvent.VK_Q)) { //zoom in
+            double currZoom = sun.getZoom();
+            sun.setZoom(currZoom + 0.05);
+        }
+
+        if (pressedKeys.contains(KeyEvent.VK_W)) { //zoom out
+            double currZoom = sun.getZoom();
+            if (currZoom > 0.10) {
+                sun.setZoom(currZoom - 0.05);
+            }
+
+        }
+
+        if (pressedKeys.contains(KeyEvent.VK_UP)) {
+            sun.setPosition(new Point(sun.getPosition().x,
+                    sun.getPosition().y + 5));
+        }
+        if (pressedKeys.contains(KeyEvent.VK_DOWN)) {
+            sun.setPosition(new Point(sun.getPosition().x,
+                    sun.getPosition().y - 5));
+        }
+        if (pressedKeys.contains(KeyEvent.VK_LEFT)) {
+            sun.setPosition(new Point(sun.getPosition().x + 5,
+                    sun.getPosition().y));
+        }
+        if (pressedKeys.contains(KeyEvent.VK_RIGHT)) {
+            sun.setPosition(new Point(sun.getPosition().x - 5,
+                    sun.getPosition().y));
+        }
+
 
         if (pressedKeys.contains(KeyEvent.VK_S)) {
             this.cw = true;
@@ -66,6 +98,7 @@ public class LabThreeSimulator extends Game {
         if (pressedKeys.contains(KeyEvent.VK_A)) {
             this.cw = false;
         }
+
         if(earth != null) {
             earth.update(pressedKeys);
             double newX, newY;

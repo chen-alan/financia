@@ -30,6 +30,7 @@ public class DisplayObject {
 	private double scale;
 	private DisplayObject parent;
 	private Point parentPosition;
+	private double zoom;
 
 
 	/**
@@ -47,6 +48,7 @@ public class DisplayObject {
 		this.visible = true;
 		this.parent = null;
 		this.parentPosition = new Point(0, 0);
+		this.zoom = 1;
 	}
 
 	public DisplayObject(String id, String fileName) {
@@ -61,6 +63,7 @@ public class DisplayObject {
 		this.visible = true;
 		this.parent = null;
 		this.parentPosition = new Point(0, 0);
+		this.zoom = 1;
 	}
 
 	public DisplayObject() {
@@ -74,6 +77,7 @@ public class DisplayObject {
 		this.visible = true;
 		this.parent = null;
 		this.parentPosition = new Point(0, 0);
+		this.zoom = 1;
 	}
 
 	public void setId(String id) {
@@ -115,6 +119,10 @@ public class DisplayObject {
 	public void setVisible(boolean x) { this.visible = x;}
 
 	public DisplayObject getParent() { return this.parent; }
+
+	public double getZoom() { return this.zoom; }
+
+	public void setZoom(double z) { this.zoom = z;}
 
 
 
@@ -237,7 +245,11 @@ public class DisplayObject {
 			 */
 			Graphics2D g2d = (Graphics2D) g;
 			applyTransformations(g2d);
-
+			if (this.zoom != 1) {
+				g2d.translate(400, 400);
+				g2d.scale(this.zoom, this.zoom);
+				g2d.translate(-400,-400);
+			}
 			/* Actually draw the image, perform the pivot point translation here */
 			if (this.visible) {
 				g2d.drawImage(displayImage, this.localToGlobal(this.position).x,
@@ -258,6 +270,10 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void applyTransformations(Graphics2D g2d) {
+		//if (this.zoom != 1) {
+			//g2d.translate(400, 400);
+		//}
+
 	}
 
 	/**
@@ -265,6 +281,10 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void reverseTransformations(Graphics2D g2d) {
+		//if (this.zoom != 1) {
+			// g2d.translate(-400, -400);
+		//}
+
 	}
 
 }
