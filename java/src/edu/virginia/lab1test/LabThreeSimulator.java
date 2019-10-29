@@ -6,17 +6,17 @@ import edu.virginia.engine.display.Sprite;
 
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 
 public class LabThreeSimulator extends Game {
 
     /*planet and sun sprites*/
-    Sprite sun = new Sprite("Sun", "solarSystem" + File.separator+"sun.png", new Point(100,100));
+    private int tick;
+    private static final double DEG_TO_RAD = Math.PI / 180;
+    Sprite sun = new Sprite("Sun", "solarSystem" + File.separator+"sun.png", new Point(300, 300));
     Sprite earth = new Sprite("Earth", "solarSystem" + File.separator+"earth.png");
     Sprite jupiter = new Sprite("Jupiter", "solarSystem" + File.separator+"jupiter.png");
     Sprite earthMoon = new Sprite("EarthMoon", "solarSystem" + File.separator+"earthMoon.png");
-    Sprite jupiterMoon = new Sprite("JupiterMoon", "solarSystem" + File.separator+"jupiterMoon.png");
-    Sprite neptune = new Sprite("Neptune", "solarSystem" + File.separator+"neptune.png");
-    Sprite comet = new Sprite("Comet", "solarSystem" + File.separator+"comet.png");
 
     /**
      * Constructor. See constructor in Game.java for details on the parameters given
@@ -24,20 +24,39 @@ public class LabThreeSimulator extends Game {
     public LabThreeSimulator(){
         super("Lab Three Simulator", 800,800);
 
+        this.tick = 0;
+
         /*add children*/
         sun.addChild(earth);
-        sun.addChild(jupiter);
-        sun.addChild(neptune);
-        sun.addChild(comet);
-        earth.addChild(earthMoon);
-        jupiter.addChild(jupiterMoon);
+//        sun.addChild(jupiter);
+//        earth.addChild(earthMoon);
 
-        earth.setPosition(earth.globalToLocal(new Point(150, 150)));
-        System.out.println(earth.getPosition());
-        System.out.println(sun.getPosition());
+        earth.setPosition(earth.globalToLocal(new Point(450, 450)));
+//        jupiter.setPosition(jupiter.globalToLocal(new Point(400, 400)));
+//        earthMoon.setPosition(earthMoon.globalToLocal(new Point(500, 500)));
 
     }
 
+    /**
+     * Engine will automatically call this update method once per frame and pass to us
+     * the set of keys (as strings) that are currently being pressed down
+     * */
+
+
+    @Override
+    public void update(ArrayList<Integer> pressedKeys) {
+        super.update(pressedKeys);
+
+        if(earth != null) {
+            earth.update(pressedKeys);
+            tick++;
+            System.out.println(earth.getPosition());
+            double newX = (earth.getParentPosition().x - earth.getPosition().x) * Math.cos(this.tick * DEG_TO_RAD);
+            double newY = (earth.getParentPosition().y - earth.getPosition().y) * Math.sin(this.tick * DEG_TO_RAD);
+//            System.out.println("newX: " + newX + "\tnewY: " + newY);
+        }
+
+    }
     /**
      * Engine automatically invokes draw() every frame as well. If we want to make sure mario gets drawn to
      * the screen, we need to make sure to override this method and call mario's draw method.

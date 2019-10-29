@@ -98,12 +98,8 @@ public class DisplayObjectContainer extends DisplayObject {
 
         if (this.children != null) {
             for (DisplayObject child : this.children) {
-                System.out.println("child is: " + child.getId());
-//                child.setPosition(child.localToGlobal(child.getPosition()));
-                System.out.println("child position in global is: " + child.getPosition());
+//                System.out.println(child.getId() + child.getRotation());
                 child.draw(g);
-//                child.setPosition(child.globalToLocal(child.getPosition()));
-                System.out.println("child position in local is: " + child.getPosition());
             }
         }
 

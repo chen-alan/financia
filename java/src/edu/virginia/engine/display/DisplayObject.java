@@ -29,6 +29,7 @@ public class DisplayObject {
 	private float oldAlpha;
 	private double scale;
 	private DisplayObject parent;
+	private Point parentPosition;
 
 
 	/**
@@ -45,6 +46,7 @@ public class DisplayObject {
 		this.scale = 1.0;
 		this.visible = true;
 		this.parent = null;
+		this.parentPosition = new Point(0, 0);
 	}
 
 	public DisplayObject(String id, String fileName) {
@@ -58,6 +60,7 @@ public class DisplayObject {
 		this.scale = 1.0;
 		this.visible = true;
 		this.parent = null;
+		this.parentPosition = new Point(0, 0);
 	}
 
 	public DisplayObject() {
@@ -70,6 +73,7 @@ public class DisplayObject {
 		this.scale = 1.0;
 		this.visible = true;
 		this.parent = null;
+		this.parentPosition = new Point(0, 0);
 	}
 
 	public void setId(String id) {
@@ -112,7 +116,14 @@ public class DisplayObject {
 
 	public DisplayObject getParent() { return this.parent; }
 
-	public void setParent(DisplayObject newParent) { this.parent = newParent;}
+	public void setParent(DisplayObject newParent) {
+		this.parent = newParent;
+		this.setParentPosition(newParent.getPosition());
+	}
+
+	public Point getParentPosition() { return this.parentPosition; }
+
+	public void setParentPosition(Point newPoint) { this.parentPosition = newPoint; }
 
 	/**
 	 * given a point in the local coordinate system, return its corresponding point
@@ -227,8 +238,8 @@ public class DisplayObject {
 
 			/* Actually draw the image, perform the pivot point translation here */
 			if (this.visible) {
-				g2d.drawImage(displayImage, this.position.x,
-						this.position.y,
+				g2d.drawImage(displayImage, this.localToGlobal(this.position).x,
+						this.localToGlobal(this.position).y,
 						(int) (getUnscaledWidth()),
 						(int) (getUnscaledHeight()), null);
 			}
@@ -245,15 +256,6 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void applyTransformations(Graphics2D g2d) {
-//		g2d.translate(this.position.x, this.position.y);
-//		g2d.rotate(Math.toRadians(this.getRotation()), this.pivotPoint.x,
-//				this.pivotPoint.y);
-//		g2d.scale(this.scale, this.scale);
-//		float curAlpha;
-//		this.oldAlpha = curAlpha = ((AlphaComposite)
-//				g2d.getComposite()).getAlpha();
-//		g2d.setComposite(AlphaComposite.getInstance(3, curAlpha *
-//				this.alpha));
 	}
 
 	/**
@@ -261,12 +263,6 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void reverseTransformations(Graphics2D g2d) {
-//		g2d.translate(-this.position.x, -this.position.y);
-//		g2d.rotate(-Math.toRadians(this.getRotation()), this.pivotPoint.x,
-//				this.pivotPoint.y);
-//		g2d.scale(1/this.scale, 1/this.scale);
-//		g2d.setComposite(AlphaComposite.getInstance(3,
-//				this.oldAlpha));
 	}
 
 }
