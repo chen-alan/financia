@@ -270,10 +270,6 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void applyTransformations(Graphics2D g2d) {
-		//if (this.zoom != 1) {
-			//g2d.translate(400, 400);
-		//}
-
 	}
 
 	/**
@@ -281,10 +277,6 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void reverseTransformations(Graphics2D g2d) {
-		//if (this.zoom != 1) {
-			// g2d.translate(-400, -400);
-		//}
-
 	}
 
 }

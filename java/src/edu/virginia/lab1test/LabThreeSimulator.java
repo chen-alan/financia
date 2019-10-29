@@ -16,6 +16,7 @@ public class LabThreeSimulator extends Game {
     private int earthRadius;
     private int earthMoonRadius;
     private int jupiterRadius;
+    private Point sunPosition;
     private boolean cw;
     private static final double DEG_TO_RAD = Math.PI / 180;
     Sprite sun = new Sprite("Sun", "solarSystem" + File.separator+"sun.png", new Point(336, 336));
@@ -33,6 +34,7 @@ public class LabThreeSimulator extends Game {
         this.cw = true;
 
         /*add children*/
+        this.sunPosition = sun.getPosition();
         sun.addChild(earth);
         earth.addChild(earthMoon);
         sun.addChild(jupiter);
@@ -58,38 +60,40 @@ public class LabThreeSimulator extends Game {
         tick++;
 
        // System.out.println(pressedKeys);
-        if(sun != null) sun.update(pressedKeys);
+        if(sun != null) {
+            sun.update(pressedKeys);
 
-        if (pressedKeys.contains(KeyEvent.VK_Q)) { //zoom in
-            double currZoom = sun.getZoom();
-            sun.setZoom(currZoom + 0.05);
-        }
+            if (pressedKeys.contains(KeyEvent.VK_Q)) { //zoom in
+                double currZoom = sun.getZoom();
+                sun.setZoom(currZoom + 0.05);
+            }
 
-        if (pressedKeys.contains(KeyEvent.VK_W)) { //zoom out
-            double currZoom = sun.getZoom();
-            if (currZoom > 0.10) {
-                sun.setZoom(currZoom - 0.05);
+            if (pressedKeys.contains(KeyEvent.VK_W)) { //zoom out
+                double currZoom = sun.getZoom();
+                if (currZoom > 0.10) {
+                    sun.setZoom(currZoom - 0.05);
+                }
+
+            }
+
+            if (pressedKeys.contains(KeyEvent.VK_UP)) {
+                sun.setPosition(new Point(sun.getPosition().x,
+                        sun.getPosition().y + 5));
+            }
+            if (pressedKeys.contains(KeyEvent.VK_DOWN)) {
+                sun.setPosition(new Point(sun.getPosition().x,
+                        sun.getPosition().y - 5));
+            }
+            if (pressedKeys.contains(KeyEvent.VK_LEFT)) {
+                sun.setPosition(new Point(sun.getPosition().x + 5,
+                        sun.getPosition().y));
+            }
+            if (pressedKeys.contains(KeyEvent.VK_RIGHT)) {
+                sun.setPosition(new Point(sun.getPosition().x - 5,
+                        sun.getPosition().y));
             }
 
         }
-
-        if (pressedKeys.contains(KeyEvent.VK_UP)) {
-            sun.setPosition(new Point(sun.getPosition().x,
-                    sun.getPosition().y + 5));
-        }
-        if (pressedKeys.contains(KeyEvent.VK_DOWN)) {
-            sun.setPosition(new Point(sun.getPosition().x,
-                    sun.getPosition().y - 5));
-        }
-        if (pressedKeys.contains(KeyEvent.VK_LEFT)) {
-            sun.setPosition(new Point(sun.getPosition().x + 5,
-                    sun.getPosition().y));
-        }
-        if (pressedKeys.contains(KeyEvent.VK_RIGHT)) {
-            sun.setPosition(new Point(sun.getPosition().x - 5,
-                    sun.getPosition().y));
-        }
-
 
         if (pressedKeys.contains(KeyEvent.VK_S)) {
             this.cw = true;
@@ -103,12 +107,12 @@ public class LabThreeSimulator extends Game {
             earth.update(pressedKeys);
             double newX, newY;
             if (this.cw) {
-                newY = (earth.getParentPosition().y - this.earthRadius) * Math.sin(this.tick * DEG_TO_RAD * 2) + 10;
-                newX = (earth.getParentPosition().x - this.earthRadius) * Math.cos(this.tick * DEG_TO_RAD * 2) + 30;
+                newY = (this.sunPosition.y - this.earthRadius) * Math.sin(this.tick * DEG_TO_RAD * 2) + 10;
+                newX = (this.sunPosition.x - this.earthRadius) * Math.cos(this.tick * DEG_TO_RAD * 2) + 30;
             }
             else {
-                newY = (earth.getParentPosition().y - this.earthRadius) * Math.cos(this.tick * DEG_TO_RAD * 2) + 10;
-                newX = (earth.getParentPosition().x - this.earthRadius) * Math.sin(this.tick * DEG_TO_RAD * 2) + 30;
+                newY = (this.sunPosition.y - this.earthRadius) * Math.cos(this.tick * DEG_TO_RAD * 2) + 10;
+                newX = (this.sunPosition.x - this.earthRadius) * Math.sin(this.tick * DEG_TO_RAD * 2) + 30;
             }
             Point newPosition = new Point((int) newX, (int) newY);
             earth.setPosition(newPosition);
@@ -133,12 +137,12 @@ public class LabThreeSimulator extends Game {
             jupiter.update(pressedKeys);
             double newX, newY;
             if (this.cw) {
-                newY = (jupiter.getParentPosition().y - this.jupiterRadius - 200) * Math.sin(this.tick / 2 * DEG_TO_RAD * 2) + 30;
-                newX = (jupiter.getParentPosition().x - this.jupiterRadius - 200) * Math.cos(this.tick / 2 * DEG_TO_RAD * 2) + 30;
+                newY = (this.sunPosition.y - this.jupiterRadius - 200) * Math.sin(this.tick / 2.0 * DEG_TO_RAD * 2) + 30;
+                newX = (this.sunPosition.x - this.jupiterRadius - 200) * Math.cos(this.tick / 2.0 * DEG_TO_RAD * 2) + 30;
             }
             else {
-                newY = (jupiter.getParentPosition().y - this.jupiterRadius - 200) * Math.cos(this.tick / 2 * DEG_TO_RAD * 2) + 30;
-                newX = (jupiter.getParentPosition().x - this.jupiterRadius - 200) * Math.sin(this.tick / 2 * DEG_TO_RAD * 2) + 30;
+                newY = (this.sunPosition.y - this.jupiterRadius - 200) * Math.cos(this.tick / 2.0 * DEG_TO_RAD * 2) + 30;
+                newX = (this.sunPosition.x - this.jupiterRadius - 200) * Math.sin(this.tick / 2.0 * DEG_TO_RAD * 2) + 30;
             }
             Point newPosition = new Point((int) newX, (int) newY);
             jupiter.setPosition(newPosition);
