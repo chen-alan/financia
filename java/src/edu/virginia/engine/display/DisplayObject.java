@@ -116,12 +116,14 @@ public class DisplayObject {
 
 	public DisplayObject getParent() { return this.parent; }
 
+
+
 	public void setParent(DisplayObject newParent) {
 		this.parent = newParent;
 		this.setParentPosition(newParent.getPosition());
 	}
 
-	public Point getParentPosition() { return this.parentPosition; }
+	public Point getParentPosition() { return this.getParent().getPosition(); }
 
 	public void setParentPosition(Point newPoint) { this.parentPosition = newPoint; }
 

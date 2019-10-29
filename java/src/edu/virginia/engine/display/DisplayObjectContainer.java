@@ -98,7 +98,6 @@ public class DisplayObjectContainer extends DisplayObject {
 
         if (this.children != null) {
             for (DisplayObject child : this.children) {
-//                System.out.println(child.getId() + child.getRotation());
                 child.draw(g);
             }
         }

@@ -12,6 +12,9 @@ public class LabThreeSimulator extends Game {
 
     /*planet and sun sprites*/
     private int tick;
+    private int earthRadius;
+    private int earthMoonRadius;
+    private int jupiterRadius;
     private static final double DEG_TO_RAD = Math.PI / 180;
     Sprite sun = new Sprite("Sun", "solarSystem" + File.separator+"sun.png", new Point(300, 300));
     Sprite earth = new Sprite("Earth", "solarSystem" + File.separator+"earth.png");
@@ -28,12 +31,15 @@ public class LabThreeSimulator extends Game {
 
         /*add children*/
         sun.addChild(earth);
-//        sun.addChild(jupiter);
-//        earth.addChild(earthMoon);
+        earth.addChild(earthMoon);
+        sun.addChild(jupiter);
 
         earth.setPosition(earth.globalToLocal(new Point(450, 450)));
-//        jupiter.setPosition(jupiter.globalToLocal(new Point(400, 400)));
-//        earthMoon.setPosition(earthMoon.globalToLocal(new Point(500, 500)));
+        this.earthRadius = earth.getPosition().x;
+        earthMoon.setPosition(earthMoon.globalToLocal(new Point(500, 500)));
+        this.earthMoonRadius = earthMoon.getPosition().x;
+        jupiter.setPosition(jupiter.globalToLocal(new Point(700, 700)));
+        this.jupiterRadius = jupiter.getPosition().x;
 
     }
 
@@ -46,15 +52,33 @@ public class LabThreeSimulator extends Game {
     @Override
     public void update(ArrayList<Integer> pressedKeys) {
         super.update(pressedKeys);
+        tick++;
+
+        System.out.println(pressedKeys);
 
         if(earth != null) {
             earth.update(pressedKeys);
-            tick++;
-            double newX = (earth.getParentPosition().x - earth.getPosition().x) * Math.cos(this.tick * DEG_TO_RAD);
-            double newY = (earth.getParentPosition().y - earth.getPosition().y) * Math.sin(this.tick * DEG_TO_RAD);
-            System.out.println("newX: " + newX + "\tnewY: " + newY);
+            double newX = (earth.getParentPosition().x - this.earthRadius) * Math.cos(this.tick * DEG_TO_RAD * 2) + 30;
+            double newY = (earth.getParentPosition().y - this.earthRadius) * Math.sin(this.tick * DEG_TO_RAD * 2) + 10;
+            Point newPosition = new Point((int) newX, (int) newY);
+            earth.setPosition(newPosition);
         }
 
+        if(earth != null) {
+            earthMoon.update(pressedKeys);
+            double newX = (this.earthMoonRadius) * Math.cos(this.tick * DEG_TO_RAD * 6) + 20;
+            double newY = (this.earthMoonRadius) * Math.sin(this.tick * DEG_TO_RAD * 6) + 10;
+            Point newPosition = new Point((int) newX, (int) newY);
+            earthMoon.setPosition(newPosition);
+        }
+
+        if(jupiter != null) {
+            jupiter.update(pressedKeys);
+            double newX = (jupiter.getParentPosition().x - this.jupiterRadius - 200) * Math.cos(this.tick / 2 * DEG_TO_RAD) + 30;
+            double newY = (jupiter.getParentPosition().y - this.jupiterRadius - 200) * Math.sin(this.tick / 2 * DEG_TO_RAD) + 30;
+            Point newPosition = new Point((int) newX, (int) newY);
+            jupiter.setPosition(newPosition);
+        }
     }
     /**
      * Engine automatically invokes draw() every frame as well. If we want to make sure mario gets drawn to
