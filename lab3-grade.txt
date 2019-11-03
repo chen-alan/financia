@@ -1,0 +1,21 @@
+25/25 points: Reasonable attempt at implementing all the methods in Part 1 and Part 2
+25/25 points: Sun, at least 2 planets and a moon show up on the simulator.
+5/5 points: The simulator moves continuously.
+10/10 points:
+	5/5 points: There are at least 2 planets orbiting the Sun.
+	5/5 points: The planets orbit the Sun at different rates.
+5/5 points: There is at least 1 moon that orbits a planet.
+10/10 points: 
+	5/5 points: Pressing Q zooms into the center of sun OR center of screen position
+	5/5 points: Pressing W zooms out from center of sun OR center of screen position
+10/10 points: Arrows pan up/down/left/right around the system.
+9/10 points: 
+	5/5 points: Pressing A rotates the system around the sun’s center point CCW
+	5/5 points: Pressing S rotates the system around the sun’s center point CW
+	-1: Strange jumping of planet position on direction change
+
+EC: 0/10 points: At least 1 planet has an elliptical orbit.
+
+Total Grade: 99/100
+
+Nice job! The only thing is that when the planets change direction they jump to the other side of the orbit. Kind of odd and not a good behavior, but not the biggest deal.
