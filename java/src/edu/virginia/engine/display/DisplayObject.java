@@ -125,7 +125,17 @@ public class DisplayObject {
 	public void setZoom(double z) { this.zoom = z;}
 
 
+	/** Creating Hitboxes **/
+	public Rectangle getHitbox(){
+		int xDim = this.displayImage.getWidth();
+		int yDim = this.displayImage.getHeight();
+		Point currPoint = new Point(this.getPosition());
+		return new Rectangle(currPoint.x, currPoint.y, xDim, yDim);
+	}
 
+
+
+	/**Methods to set and get parent**/
 	public void setParent(DisplayObject newParent) {
 		this.parent = newParent;
 		this.setParentPosition(newParent.getPosition());
@@ -245,15 +255,11 @@ public class DisplayObject {
 			 */
 			Graphics2D g2d = (Graphics2D) g;
 			applyTransformations(g2d);
-			if (this.zoom != 1) {
-				g2d.translate(400, 400);
-				g2d.scale(this.zoom, this.zoom);
-				g2d.translate(-400,-400);
-			}
+
 			/* Actually draw the image, perform the pivot point translation here */
 			if (this.visible) {
-				g2d.drawImage(displayImage, this.localToGlobal(this.position).x,
-						this.localToGlobal(this.position).y,
+				g2d.drawImage(displayImage, this.position.x,
+						this.position.y,
 						(int) (getUnscaledWidth()),
 						(int) (getUnscaledHeight()), null);
 			}
@@ -270,6 +276,15 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void applyTransformations(Graphics2D g2d) {
+		g2d.translate(this.position.x, this.position.y);
+		g2d.rotate(Math.toRadians(this.getRotation()), this.pivotPoint.x,
+				this.pivotPoint.y);
+		g2d.scale(this.scale, this.scale);
+		float curAlpha;
+		this.oldAlpha = curAlpha = ((AlphaComposite)
+				g2d.getComposite()).getAlpha();
+		g2d.setComposite(AlphaComposite.getInstance(3, curAlpha *
+				this.alpha));
 	}
 
 	/**
@@ -277,6 +292,12 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void reverseTransformations(Graphics2D g2d) {
+		g2d.translate(-this.position.x, -this.position.y);
+		g2d.rotate(-Math.toRadians(this.getRotation()), this.pivotPoint.x,
+				this.pivotPoint.y);
+		g2d.scale(1/this.scale, 1/this.scale);
+		g2d.setComposite(AlphaComposite.getInstance(3,
+				this.oldAlpha));
 	}
 
 }
