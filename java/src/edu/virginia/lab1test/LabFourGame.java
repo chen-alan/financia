@@ -22,8 +22,8 @@ public class LabFourGame extends Game{
     AnimatedSprite mario = new AnimatedSprite("Mario",
             "animations"+ File.separator+"mario"+File.separator+"mario_frontWalk_0.png",
             new Point(0,0));
-    Sprite mario2 = new Sprite("mario2","animations"+ File.separator+"mario"+File.separator+"mario_frontWalk_0.png",
-            new Point(0,0));
+    Sprite earth = new Sprite("earth","solarSystem"+ File.separator+"earth.png",
+            new Point(100,100));
     SoundManager sounds = new SoundManager();
 
 
@@ -31,7 +31,7 @@ public class LabFourGame extends Game{
      * Constructor. See constructor in Game.java for details on the parameters given
      * */
     public LabFourGame() {
-        super("Lab Two Test Game", 500, 500);
+        super("Lab Four", 500, 500);
 
         /*make new animations and add then to animated sprite*/
         mario.initializeFrames("mario");
@@ -139,6 +139,10 @@ public class LabFourGame extends Game{
                 mario.setOldAlpha(mario.getAlpha());
                 mario.setAlpha(mario.getAlpha() - 0.01f);
             }
+            if (earth.getAlpha() >= 0.01f) {
+                earth.setOldAlpha(earth.getAlpha());
+                earth.setAlpha(earth.getAlpha() - 0.01f);
+            }
         }
 
         if(pressedKeys.contains(KeyEvent.VK_X)) {
@@ -146,15 +150,24 @@ public class LabFourGame extends Game{
                 mario.setOldAlpha(mario.getAlpha());
                 mario.setAlpha(mario.getAlpha() + 0.01f);
             }
+            if (earth.getAlpha() <= 0.99f) {
+                earth.setOldAlpha(earth.getAlpha());
+                earth.setAlpha(earth.getAlpha() + 0.01f);
+            }
         }
 
         if(pressedKeys.contains(KeyEvent.VK_A)){
             mario.setScale(mario.getScale() + 0.01);
+            earth.setScale(earth.getScale() + 0.01);
+
         }
 
         if(pressedKeys.contains(KeyEvent.VK_S)){
             if (mario.getScale() >=0.01) {
                 mario.setScale(mario.getScale() - 0.01);
+            }
+            if (earth.getScale() >=0.01) {
+                earth.setScale(earth.getScale() - 0.01);
             }
         }
 
@@ -185,8 +198,8 @@ public class LabFourGame extends Game{
             mario.draw(g);
         }
 
-        if(mario2!=null){
-            mario2.draw(g);
+        if(earth!=null){
+            earth.draw(g);
         }
 
 
