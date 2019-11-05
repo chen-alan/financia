@@ -127,10 +127,14 @@ public class DisplayObject {
 
 	/** Creating Hitboxes **/
 	public Rectangle getHitbox(){
-		int xDim = this.displayImage.getWidth();
-		int yDim = this.displayImage.getHeight();
+		double xDim = this.displayImage.getWidth() * this.scale;
+		double yDim = this.displayImage.getHeight() * this.scale;
 		Point currPoint = new Point(this.getPosition());
-		return new Rectangle(currPoint.x, currPoint.y, xDim, yDim);
+		System.out.println("currPoint.x: " + currPoint.x);
+		System.out.println("currPoint.y: " + currPoint.y);
+		System.out.println("xDim: " + xDim);
+		System.out.println("yDim: " + yDim);
+		return new Rectangle(currPoint.x, currPoint.y, (int)xDim, (int)yDim);
 	}
 
 
