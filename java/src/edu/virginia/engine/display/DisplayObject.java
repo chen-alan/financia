@@ -1,6 +1,7 @@
 package edu.virginia.engine.display;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -126,20 +127,23 @@ public class DisplayObject {
 
 
 	/** Creating Hitboxes **/
-	public Rectangle getHitbox(){
-		double xDim = this.displayImage.getWidth() * this.scale;
-		double yDim = this.displayImage.getHeight() * this.scale;
-		Point currPoint = new Point(this.getPosition());
-		System.out.println("currPoint.x: " + currPoint.x);
-		System.out.println("currPoint.y: " + currPoint.y);
-		System.out.println("xDim: " + xDim);
-		System.out.println("yDim: " + yDim);
-		return new Rectangle(currPoint.x, currPoint.y, (int)xDim, (int)yDim);
+	public Shape getHitbox(){
+		double xDim = this.displayImage.getWidth();
+		double yDim = this.displayImage.getHeight();
+		Rectangle rect = new Rectangle(this.getPosition().x, this.getPosition().y, (int)xDim, (int)yDim);
+		AffineTransform s = new AffineTransform();
+		s.scale(this.scale, this.scale);
+//		if (this.scale >1) {
+//			s.translate(10*this.scale, 10*this.scale);
+//		}
+		s.rotate(-this.rotation, this.pivotPoint.x, this.pivotPoint.y);
+		Shape hitbox = s.createTransformedShape(rect);
+		return hitbox;
 	}
 
 
 
-	/**Methods to set and get parent**/
+	/**Metho.dds to set and get parent**/
 	public void setParent(DisplayObject newParent) {
 		this.parent = newParent;
 		this.setParentPosition(newParent.getPosition());
@@ -262,10 +266,14 @@ public class DisplayObject {
 
 			/* Actually draw the image, perform the pivot point translation here */
 			if (this.visible) {
+//				g2d.drawImage(displayImage, this.position.x,
+//						this.position.y,
+//						(int) (getUnscaledWidth()),
+//						(int) (getUnscaledHeight()), null);
 				g2d.drawImage(displayImage, this.position.x,
 						this.position.y,
-						(int) (getUnscaledWidth()),
-						(int) (getUnscaledHeight()), null);
+						(int) (this.getUnscaledWidth()),
+						(int) (this.getUnscaledHeight()), null);
 			}
 			/*
 			 * undo the transformations so this doesn't affect other display
@@ -296,10 +304,10 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void reverseTransformations(Graphics2D g2d) {
-		g2d.translate(-this.position.x, -this.position.y);
 		g2d.rotate(-Math.toRadians(this.getRotation()), this.pivotPoint.x,
 				this.pivotPoint.y);
 		g2d.scale(1/this.scale, 1/this.scale);
+		g2d.translate(-this.position.x, -this.position.y);
 		g2d.setComposite(AlphaComposite.getInstance(3,
 				this.oldAlpha));
 	}

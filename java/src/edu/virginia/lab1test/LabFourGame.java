@@ -22,6 +22,8 @@ public class LabFourGame extends Game{
     AnimatedSprite mario = new AnimatedSprite("Mario",
             "animations"+ File.separator+"mario"+File.separator+"mario_frontWalk_0.png",
             new Point(0,0));
+    Sprite mario2 = new Sprite("mario2","animations"+ File.separator+"mario"+File.separator+"mario_frontWalk_0.png",
+            new Point(0,0));
     SoundManager sounds = new SoundManager();
 
 
@@ -29,7 +31,7 @@ public class LabFourGame extends Game{
      * Constructor. See constructor in Game.java for details on the parameters given
      * */
     public LabFourGame() {
-        super("Lab Two Test Game", 500, 300);
+        super("Lab Two Test Game", 500, 500);
 
         /*make new animations and add then to animated sprite*/
         mario.initializeFrames("mario");
@@ -46,7 +48,7 @@ public class LabFourGame extends Game{
 
         //load sounds
         sounds.loadMusic("background", "background.wav");
-        sounds.playMusic("background");
+        //sounds.playMusic("background");
         sounds.loadSoundEffect("woohoo", "woohoo.wav");
         sounds.loadSoundEffect("bump", "bump.wav");
         sounds.loadSoundEffect("jump", "jump.wav");
@@ -83,25 +85,21 @@ public class LabFourGame extends Game{
             mario.setPosition(new Point(mario.getPosition().x,
                     mario.getPosition().y - 1));
             mario.animate("backWalk");
-            sounds.playSoundEffect("jump");
         }
         if (pressedKeys.contains(KeyEvent.VK_DOWN)) {
             mario.setPosition(new Point(mario.getPosition().x,
                     mario.getPosition().y + 1));
             mario.animate("frontWalk");
-            sounds.playSoundEffect("bump");
         }
         if (pressedKeys.contains(KeyEvent.VK_LEFT)) {
             mario.setPosition(new Point(mario.getPosition().x - 1,
                     mario.getPosition().y));
             mario.animate("leftWalk");
-            sounds.playSoundEffect("woohoo");
         }
         if (pressedKeys.contains(KeyEvent.VK_RIGHT)) {
             mario.setPosition(new Point(mario.getPosition().x + 1,
                     mario.getPosition().y));
             mario.animate("rightWalk");
-            sounds.playSoundEffect("woohoo");
         }
         if (pressedKeys.contains(KeyEvent.VK_I)) {
             mario.setPivotPoint(new Point(mario.getPivotPoint().x,
@@ -187,13 +185,19 @@ public class LabFourGame extends Game{
             mario.draw(g);
         }
 
+        if(mario2!=null){
+            mario2.draw(g);
+        }
+
+
         //FOR DEBUGGING PURPOSES DRAW HITBOX
-        if(mario != null) {
-            Rectangle hitbox = mario.getHitbox();
+        if(mario!= null && mario.getHitbox() != null) {
+            Shape hitbox = mario.getHitbox();
+            Rectangle hb = hitbox.getBounds();
             DisplayObject rect = new DisplayObject("box");
-            BufferedImage image = new BufferedImage(hitbox.width, hitbox.height, BufferedImage.TYPE_INT_RGB);
+            BufferedImage image = new BufferedImage(hb.width, hb.height, BufferedImage.TYPE_INT_RGB);
             rect.setImage(image);
-            rect.setPosition(new Point(hitbox.x, hitbox.y));
+            rect.setPosition(new Point(hb.x, hb.y));
             rect.draw(g);
         }
     }
