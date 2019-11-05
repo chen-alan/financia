@@ -6,10 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
-import edu.virginia.engine.display.AnimatedSprite;
-import edu.virginia.engine.display.Animation;
-import edu.virginia.engine.display.DisplayObject;
-import edu.virginia.engine.display.Game;
+import edu.virginia.engine.display.*;
 import edu.virginia.engine.util.SoundManager;
 
 /**
@@ -191,14 +188,14 @@ public class LabFourGame extends Game{
         }
 
         //FOR DEBUGGING PURPOSES DRAW HITBOX
-//        if(mario != null) {
-//            Rectangle hitbox = mario.getHitbox();
-//            DisplayObject rect = new DisplayObject("box");
-//            BufferedImage image = new BufferedImage(hitbox.width, hitbox.height, BufferedImage.TYPE_INT_RGB);
-//            rect.setImage(image);
-//            rect.setPosition(new Point(hitbox.x, hitbox.y));
-//            rect.draw(g);
-//        }
+        if(mario != null) {
+            Rectangle hitbox = mario.getHitbox();
+            DisplayObject rect = new DisplayObject("box");
+            BufferedImage image = new BufferedImage(hitbox.width, hitbox.height, BufferedImage.TYPE_INT_RGB);
+            rect.setImage(image);
+            rect.setPosition(new Point(hitbox.x, hitbox.y));
+            rect.draw(g);
+        }
     }
 
     /**
