@@ -2,6 +2,8 @@ package edu.virginia.engine.display;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -128,17 +130,21 @@ public class DisplayObject {
 
 	/** Creating Hitboxes **/
 	public Shape getHitbox(){
-		double xDim = this.displayImage.getWidth();
-		double yDim = this.displayImage.getHeight();
-		Rectangle rect = new Rectangle(this.getPosition().x, this.getPosition().y, (int)xDim, (int)yDim);
+		double xDim = this.displayImage.getWidth()*0.43;
+		double yDim = this.displayImage.getHeight()*0.43;
+		int x = this.getPosition().x;
+		int y = this.getPosition().y;
+		Shape hitbox = new Rectangle(x , y, (int) xDim, (int) yDim);
 		AffineTransform s = new AffineTransform();
-		s.scale(this.scale, this.scale);
-//		if (this.scale >1) {
-//			s.translate(10*this.scale, 10*this.scale);
-//		}
-		s.rotate(-this.rotation, this.pivotPoint.x, this.pivotPoint.y);
-		Shape hitbox = s.createTransformedShape(rect);
-		return hitbox;
+		s.rotate(Math.toRadians(this.rotation), this.position.x+this.pivotPoint.x, this.position.y+this.pivotPoint.y);
+		//s.scale(this.scale, this.scale);
+		if (this.scale >1) {
+			s.translate((1/this.scale), (1/this.scale));
+		}
+		PathIterator pathIt = hitbox.getPathIterator(s);
+		GeneralPath path = new GeneralPath();
+		path.append(pathIt, true);
+		return path;
 	}
 
 
@@ -289,8 +295,8 @@ public class DisplayObject {
 	 * */
 	protected void applyTransformations(Graphics2D g2d) {
 		g2d.translate(this.position.x, this.position.y);
-		g2d.rotate(Math.toRadians(this.getRotation()), this.pivotPoint.x,
-				this.pivotPoint.y);
+		g2d.rotate(Math.toRadians(this.getRotation()), this.position.x+this.pivotPoint.x,
+				this.position.y+this.pivotPoint.y);
 		g2d.scale(this.scale, this.scale);
 		float curAlpha;
 		this.oldAlpha = curAlpha = ((AlphaComposite)
@@ -304,8 +310,8 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void reverseTransformations(Graphics2D g2d) {
-		g2d.rotate(-Math.toRadians(this.getRotation()), this.pivotPoint.x,
-				this.pivotPoint.y);
+		g2d.rotate(-Math.toRadians(this.getRotation()), this.position.x+this.pivotPoint.x,
+				this.position.y+this.pivotPoint.y);
 		g2d.scale(1/this.scale, 1/this.scale);
 		g2d.translate(-this.position.x, -this.position.y);
 		g2d.setComposite(AlphaComposite.getInstance(3,
