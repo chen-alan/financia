@@ -74,14 +74,10 @@ public class LabFourGame extends Game{
     /** Collision Detection  **/
     public boolean collidesWith(DisplayObject other){
         Shape hitbox = mario.getHitbox();
-        AffineTransform s = new AffineTransform();
-        PathIterator pathIt = hitbox.getPathIterator(s);
-        GeneralPath path = new GeneralPath();
-        path.append(pathIt, true);
+        Shape otherHitbox = other.getHitbox();
+        Rectangle2D otherHitboxRect = otherHitbox.getBounds2D();
 
-        Rectangle otherHb = other.getHitbox().getBounds();
-        Rectangle2D.Double bound = new Rectangle2D.Double(otherHb.getX(), otherHb.getY(), otherHb.getWidth(), otherHb.getHeight());
-        return path.intersects(bound);
+        return hitbox.intersects(otherHitboxRect);
     }
 
 
@@ -368,29 +364,6 @@ public class LabFourGame extends Game{
                 trophy.draw(g);
             }
 
-
-
-            //FOR DEBUGGING PURPOSES DRAW HITBOX
-            if (mario != null && mario.getHitbox() != null) {
-                Shape hitbox = mario.getHitbox();
-                Rectangle hb = hitbox.getBounds();
-                DisplayObject rect = new DisplayObject("box");
-                BufferedImage image = new BufferedImage(hb.width, hb.height, BufferedImage.TYPE_INT_RGB);
-                rect.setImage(image);
-                rect.setPosition(new Point(hb.x, hb.y));
-                rect.draw(g);
-
-                //trophy hitbox
-                Shape hitbox2 = trophy.getHitbox();
-                Rectangle hb2 = hitbox2.getBounds();
-                DisplayObject rect2 = new DisplayObject("box");
-                BufferedImage image2 = new BufferedImage(hb2.width, hb2.height, BufferedImage.TYPE_INT_RGB);
-                rect2.setImage(image2);
-                rect2.setPosition(new Point(hb2.x, hb2.y));
-                rect2.draw(g);
-
-
-            }
         }
     }
 
