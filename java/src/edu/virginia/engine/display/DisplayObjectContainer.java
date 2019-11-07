@@ -94,14 +94,13 @@ public class DisplayObjectContainer extends DisplayObject {
         super.draw(g); //Draw myself
         Graphics2D g2d = (Graphics2D) g;
 
-        applyTransformations(g2d); //apply my transformations to my children
-
         if (this.children != null) {
             for (DisplayObject child : this.children) {
                 child.draw(g);
             }
         }
 
+        applyTransformations(g2d); //apply my transformations to my children
         reverseTransformations(g2d);
     }
 

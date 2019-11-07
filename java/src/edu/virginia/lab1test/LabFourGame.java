@@ -26,14 +26,16 @@ public class LabFourGame extends Game{
     private boolean win;
     private boolean done;
 
-    /* Create a sprite object for our game. Default is mario_frontWalk_0.png */
+    /* Create a sprite object for our 		s = new Rectangle(this.position.x, this.position.y, (int) (this.displayImage.getWidth()), (int) (this.displayImage.getHeight()));
+game. Default is mario_frontWalk_0.png */
     AnimatedSprite mario = new AnimatedSprite("Mario",
             "animations"+ File.separator+"mario"+File.separator+"mario_frontWalk_0.png",
             new Point(0,0));
     Sprite earth = new Sprite("earth","solarSystem"+ File.separator+"earth.png",
-            new Point(100,100));
-    Sprite trophy = new Sprite("trophy", "trophy.png", new Point(200,200));
+            new Point(200,200));
+    Sprite trophy = new Sprite("trophy", "trophy.png", new Point(447,400));
     SoundManager sounds = new SoundManager();
+
 
 
     /**
@@ -42,6 +44,9 @@ public class LabFourGame extends Game{
     public LabFourGame() {
         super("Lab Four", 500, 500);
 
+        mario.setStationary(false);
+        earth.setStationary(true);
+        trophy.setStationary(true);
         colCount = 20;
         collided = false;
         win = false;
@@ -62,7 +67,7 @@ public class LabFourGame extends Game{
 
         //load sounds
         sounds.loadMusic("background", "background.wav");
-        //sounds.playMusic("background");
+        sounds.playMusic("background");
         sounds.loadSoundEffect("woohoo", "woohoo.wav");
         sounds.loadSoundEffect("bump", "bump.wav");
         sounds.loadSoundEffect("jump", "jump.wav");
@@ -188,9 +193,9 @@ public class LabFourGame extends Game{
             }
 
             if (pressedKeys.contains(KeyEvent.VK_V)) {
-                if (counter == 4) {
+                if (counter == 5) {
                     mario.setVisible(!mario.getVisible());
-                    counter = 1;
+                    counter = 0;
                 } else {
                     counter = counter + 1;
                 }
@@ -220,7 +225,6 @@ public class LabFourGame extends Game{
 
             if (pressedKeys.contains(KeyEvent.VK_A)) {
                 mario.setScale(mario.getScale() + 0.01);
-                //earth.setScale(earth.getScale() + 0.01);
 
             }
 
@@ -228,9 +232,6 @@ public class LabFourGame extends Game{
                 if (mario.getScale() >= 0.01) {
                     mario.setScale(mario.getScale() - 0.01);
                 }
-//            if (earth.getScale() >=0.01) {
-//                //earth.setScale(earth.getScale() - 0.01);
-//            }
             }
 
             //CHANGING ANIMATION SPEED
@@ -351,7 +352,7 @@ public class LabFourGame extends Game{
                 g2d.dispose();
                 Sprite display = new Sprite("display");
                 display.setImage(img);
-                display.setPosition(new Point(100, 10));
+                display.setPosition(new Point(200, 10));
                 display.draw(g);
 
             }

@@ -22,6 +22,7 @@ public class Sprite extends DisplayObjectContainer {
 		this.setPosition(position);
 	}
 
+
 	@Override
 	public void update(ArrayList<Integer> pressedKeys) {
 		super.update(pressedKeys);

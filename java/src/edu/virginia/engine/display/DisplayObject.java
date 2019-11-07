@@ -34,6 +34,7 @@ public class DisplayObject {
 	private DisplayObject parent;
 	private Point parentPosition;
 	private double zoom;
+	private boolean stationary;
 
 
 	/**
@@ -83,6 +84,14 @@ public class DisplayObject {
 		this.zoom = 1;
 	}
 
+	public void setStationary(boolean newStationary) {
+		this.stationary = newStationary;
+	}
+
+	public boolean getStationary() {
+		return this.stationary;
+	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -127,55 +136,24 @@ public class DisplayObject {
 
 	public void setZoom(double z) { this.zoom = z;}
 
-
-	/** Creating Hitboxes **/
-//	public Shape getHitbox(){
-//		double xDim = this.displayImage.getWidth()*this.scale;
-//		double yDim = this.displayImage.getHeight()*this.scale;
-//		int x = this.getPosition().x;
-//		int y = this.getPosition().y;
-//		Shape hitbox = new Rectangle(x , y, (int) xDim, (int) yDim);
-//		AffineTransform s = new AffineTransform();
-//		s.rotate(Math.toRadians(this.rotation), this.position.x+this.pivotPoint.x, this.position.y+this.pivotPoint.y);
-//		//s.scale(this.scale, this.scale);
-////		if (this.scale > 1) {
-////			s.scale((this.scale), (this.scale));
-////		}
-//
-//        // affinetransform.transformShape
-//        // shape.intersect
-//
-//		PathIterator pathIt = hitbox.getPathIterator(s);
-//		GeneralPath path = new GeneralPath();
-//		path.append(pathIt, true);
-//		return path;
-//	}
-
 	/**
 	 * NEW HITBOX FXN
 	 * @return AffineTransform
 	 */
     public Shape getHitbox() {
         AffineTransform at = new AffineTransform();
-        at.rotate(this.rotation * (Math.PI / 180), this.position.x+this.pivotPoint.x, this.position.y+this.pivotPoint.y);
+        at.rotate(this.rotation * (Math.PI / 180), this.pivotPoint.x, this.pivotPoint.y);
 		at.scale(this.scale, this.scale);
-		if(scale != 1){
-			if(scale > 1) {
-				at.translate(-(this.scale-1)*10, -(this.scale-1)*10);
-			}
-			else{
-				
-			}
+
+		Shape s;
+		if (this.getId().equals("Mario")) {
+			s = new Rectangle((int)(this.position.x), (int)(this.position.y), (int) (this.displayImage.getWidth()), (int) (this.displayImage.getHeight()));
 		}
-		Shape s = new Rectangle(this.position.x*2, this.position.y*2, (int) (this.displayImage.getWidth()), (int) (this.displayImage.getHeight()));
+		else {
+			s = new Rectangle(this.position.x, this.position.y, (int) (this.displayImage.getWidth()), (int) (this.displayImage.getHeight()));
+		}
 
-
-        Shape hitbox = at.createTransformedShape(s);
-//       			if (this.getId().equals("Mario")) {
-//				System.out.println("Mario | x: " + this.getPosition().x + "\ty: " + this.getPosition().y);
-//				System.out.println("Hitbox | " + hitbox.getBounds());
-//        }
-        return hitbox;
+		return at.createTransformedShape(s);
     }
 
 	/**Metho.dds to set and get parent**/
@@ -298,15 +276,22 @@ public class DisplayObject {
 			 */
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.draw(this.getHitbox());
-			applyTransformations(g2d);
-
-			/* Actually draw the image, perform the pivot point translation here */
-			if (this.visible) {
+			if (this.stationary) {
 				g2d.drawImage(displayImage, this.position.x,
 						this.position.y,
 						(int) (this.getUnscaledWidth()),
 						(int) (this.getUnscaledHeight()), null);
 			}
+			applyTransformations(g2d);
+			if (!this.stationary) {
+				if (this.visible) {
+					g2d.drawImage(displayImage, this.position.x,
+							this.position.y,
+							(int) (this.getUnscaledWidth()),
+							(int) (this.getUnscaledHeight()), null);
+				}
+			}
+			/* Actually draw the image, perform the pivot point translation here */
 			/*
 			 * undo the transformations so this doesn't affect other display
 			 * objects
@@ -320,7 +305,7 @@ public class DisplayObject {
 	 * object
 	 * */
 	protected void applyTransformations(Graphics2D g2d) {
-		g2d.translate(this.position.x, this.position.y);
+		g2d.translate(this.position.x / 64, this.position.y / 64);
 		g2d.rotate(Math.toRadians(this.getRotation()), this.pivotPoint.x,
 			this.pivotPoint.y);
 		g2d.scale(this.scale, this.scale);
@@ -341,7 +326,7 @@ public class DisplayObject {
 		g2d.scale(1/this.scale, 1/this.scale);
 		g2d.rotate(-Math.toRadians(this.getRotation()), this.pivotPoint.x,
 				this.pivotPoint.y);
-		g2d.translate(-this.position.x, -this.position.y);
+		g2d.translate(-this.position.x / 64, -this.position.y / 64);
 	}
 
 }
