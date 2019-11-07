@@ -285,7 +285,7 @@ game. Default is mario_frontWalk_0.png */
             g2d.dispose();
             Sprite display = new Sprite("display");
             display.setImage(img);
-            display.setPosition(new Point(20, 100));
+            display.setPosition(new Point(30, 200));
             display.draw(g);
 
         }
@@ -316,7 +316,7 @@ game. Default is mario_frontWalk_0.png */
             g2d.dispose();
             Sprite display = new Sprite("display");
             display.setImage(img);
-            display.setPosition(new Point(20, 100));
+            display.setPosition(new Point(30, 200));
             display.draw(g);
 
         }

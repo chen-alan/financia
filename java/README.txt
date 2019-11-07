@@ -1,3 +1,6 @@
+NOTE:
+We left the outline of our hitboxes in so it would be easier to see what's going on when grading.
+
 GAMEPLAY:
 The objective of the game is to reach the trophy in the bottom right corner.
 If mario collides with a planet, he loses a life.
