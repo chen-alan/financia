@@ -157,14 +157,24 @@ public class DisplayObject {
 	 */
     public Shape getHitbox() {
         AffineTransform at = new AffineTransform();
-        at.scale(this.scale, this.scale);
         at.rotate(this.rotation * (Math.PI / 180), this.position.x+this.pivotPoint.x, this.position.y+this.pivotPoint.y);
-        Shape s = new Rectangle(this.position.x*2, this.position.y*2, (int) (this.displayImage.getWidth()), (int) (this.displayImage.getHeight()));
+		at.scale(this.scale, this.scale);
+		if(scale != 1){
+			if(scale > 1) {
+				at.translate(-(this.scale-1)*10, -(this.scale-1)*10);
+			}
+			else{
+				
+			}
+		}
+		Shape s = new Rectangle(this.position.x*2, this.position.y*2, (int) (this.displayImage.getWidth()), (int) (this.displayImage.getHeight()));
+
+
         Shape hitbox = at.createTransformedShape(s);
-        if (this.getId().equals("Mario")) {
-        	System.out.println("Mario | x: " + this.getPosition().x + "\ty: " + this.getPosition().y);
-        	System.out.println("Hitbox | " + hitbox.getBounds());
-        }
+//       			if (this.getId().equals("Mario")) {
+//				System.out.println("Mario | x: " + this.getPosition().x + "\ty: " + this.getPosition().y);
+//				System.out.println("Hitbox | " + hitbox.getBounds());
+//        }
         return hitbox;
     }
 
