@@ -43,6 +43,7 @@ public class LabFiveGame extends Game{
     private double boundVel;
     private double boundTime;
     private int initX;
+    private boolean prevVis;
 
     /* Create a sprite object for our 		s = new Rectangle(this.position.x, this.position.y, (int) (this.displayImage.getWidth()), (int) (this.displayImage.getHeight()));
 game. Default is mario_frontWalk_0.png */
@@ -86,6 +87,7 @@ game. Default is mario_frontWalk_0.png */
         boundVel = 15.0;
         boundTime = 0;
         initX = 0;
+        prevVis = true;
 
         /*make new animations and add then to animated sprite*/
         mario.initializeFrames("mario");
@@ -159,17 +161,19 @@ game. Default is mario_frontWalk_0.png */
             initX = mario.getPosition().x;
         }
         int x = (int) (initX + (boundVel*boundTime) + (0.5*accel*Math.pow(boundTime, 2)));
-        if (x < 240){
+        if (x < 220){
             boundTime = 0;
             boundVel = 0;
             accel = 0;
-            mario.setPosition(new Point(240, mario.getPosition().y));
+            mario.setPosition(new Point(220, mario.getPosition().y));
             reboundLeft = false;
             reboundRight = false;
+            mario.setVisible(this.prevVis);
         }
         else{
             mario.setPosition(new Point(x, mario.getPosition().y));
-            boundTime = boundTime + 1;
+            boundTime = boundTime + 0.5;
+            mario.setVisible(!mario.getVisible());
         }
 
     }
@@ -179,17 +183,19 @@ game. Default is mario_frontWalk_0.png */
             initX = mario.getPosition().x;
         }
         int x = (int) (initX + (boundVel*boundTime) + (0.5*accel*Math.pow(boundTime, 2)));
-        if (x > 400){
+        if (x > 410){
             boundTime = 0;
             boundVel = 0;
             accel = 0;
-            mario.setPosition(new Point(400, mario.getPosition().y));
+            mario.setPosition(new Point(410, mario.getPosition().y));
             reboundRight = false;
             reboundLeft = false;
+            mario.setVisible(this.prevVis);
         }
         else{
             mario.setPosition(new Point(x, mario.getPosition().y));
-            boundTime = boundTime + 1;
+            boundTime = boundTime + 0.5;
+            mario.setVisible(!mario.getVisible());
         }
     }
 
