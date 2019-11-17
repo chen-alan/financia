@@ -37,14 +37,21 @@ public class LabFiveGame extends Game{
     private boolean falling;
     private int ground;
 
+    private boolean reboundLeft;
+    private boolean reboundRight;
+    private double accel;
+    private double boundVel;
+    private double boundTime;
+    private int initX;
+
     /* Create a sprite object for our 		s = new Rectangle(this.position.x, this.position.y, (int) (this.displayImage.getWidth()), (int) (this.displayImage.getHeight()));
 game. Default is mario_frontWalk_0.png */
     AnimatedSprite mario = new AnimatedSprite("Mario",
             "animations"+ File.separator+"mario"+File.separator+"mario_frontWalk_0.png",
             new Point(0,0));
     Sprite earth = new Sprite("earth","solarSystem"+ File.separator+"earth.png",
-            new Point(200,200));
-    Sprite trophy = new Sprite("trophy", "trophy.png", new Point(447,400));
+            new Point(300,290));
+    Sprite trophy = new Sprite("trophy", "trophy.png", new Point(620,290));
     SoundManager sounds = new SoundManager();
 
 
@@ -53,7 +60,7 @@ game. Default is mario_frontWalk_0.png */
      * Constructor. See constructor in Game.java for details on the parameters given
      * */
     public LabFiveGame() {
-        super("Lab Five", 1000, 500);
+        super("Lab Five", 700, 500);
 
         mario.setStationary(false);
         mario.setPhysics(true);
@@ -73,6 +80,13 @@ game. Default is mario_frontWalk_0.png */
         ground = 300;
         fallTime = 0;
 
+        reboundLeft = false;
+        reboundRight = false;
+        accel = -2.0;
+        boundVel = 15.0;
+        boundTime = 0;
+        initX = 0;
+
         /*make new animations and add then to animated sprite*/
         mario.initializeFrames("mario");
         ArrayList<Animation> aniList = new ArrayList<Animation>();
@@ -88,7 +102,7 @@ game. Default is mario_frontWalk_0.png */
 
         //load sounds
         sounds.loadMusic("background", "background.wav");
-        sounds.playMusic("background");
+        //sounds.playMusic("background");
         sounds.loadSoundEffect("woohoo", "woohoo.wav");
         sounds.loadSoundEffect("bump", "bump.wav");
         sounds.loadSoundEffect("jump", "jump.wav");
@@ -140,6 +154,45 @@ game. Default is mario_frontWalk_0.png */
 
     }
 
+    public void boundLeft(){
+        if(boundTime == 0){
+            initX = mario.getPosition().x;
+        }
+        int x = (int) (initX + (boundVel*boundTime) + (0.5*accel*Math.pow(boundTime, 2)));
+        if (x < 240){
+            boundTime = 0;
+            boundVel = 0;
+            accel = 0;
+            mario.setPosition(new Point(240, mario.getPosition().y));
+            reboundLeft = false;
+            reboundRight = false;
+        }
+        else{
+            mario.setPosition(new Point(x, mario.getPosition().y));
+            boundTime = boundTime + 1;
+        }
+
+    }
+
+    public void boundRight(){
+        if(boundTime == 0){
+            initX = mario.getPosition().x;
+        }
+        int x = (int) (initX + (boundVel*boundTime) + (0.5*accel*Math.pow(boundTime, 2)));
+        if (x > 400){
+            boundTime = 0;
+            boundVel = 0;
+            accel = 0;
+            mario.setPosition(new Point(400, mario.getPosition().y));
+            reboundRight = false;
+            reboundLeft = false;
+        }
+        else{
+            mario.setPosition(new Point(x, mario.getPosition().y));
+            boundTime = boundTime + 1;
+        }
+    }
+
 
 
     /**
@@ -154,6 +207,10 @@ game. Default is mario_frontWalk_0.png */
             colCount=20;
             win = false;
             done = false;
+            reboundRight = false;
+            reboundLeft = false;
+            falling = false;
+            jumping = false;
             mario = new AnimatedSprite("Mario",
                     "animations"+ File.separator+"mario"+File.separator+"mario_frontWalk_0.png",
                     new Point(0,0));
@@ -194,9 +251,33 @@ game. Default is mario_frontWalk_0.png */
                         this.colCount = this.colCount - 1;
                         collided = true;
                     }
-                } else {
+
+                    //earth position: x = 300, y = 290, dimensions = 60
+                    Point currPos =  mario.getPosition();
+                    int x = currPos.x;
+                    if(x <= 330){
+                        this.boundVel = -15.0;
+                        this.accel = 2.0;
+                        this.reboundLeft = true;
+                    }
+                    else if(x > 330){
+                        this.boundVel = 15.0;
+                        this.accel = -2.0;
+                        this.reboundRight = true;
+                    }
+                }
+                else {
                     collided = false;
                 }
+            }
+
+            if(this.reboundLeft==true){
+                this.falling = false;
+                this.boundLeft();
+            }
+            if (this.reboundRight==true){
+                this.falling = false;
+                this.boundRight();
             }
 
             if (pressedKeys.isEmpty() && (mario != null)) {
@@ -213,7 +294,7 @@ game. Default is mario_frontWalk_0.png */
                 this.jump();
             }
 
-            if((mario!=null) && (mario.getPosition().y < ground) && (!pressedKeys.contains(KeyEvent.VK_UP)) && (jumping!=true)){
+            if((mario!=null) && (mario.getPosition().y < ground) && (!pressedKeys.contains(KeyEvent.VK_UP)) && (jumping!=true) &&(this.reboundRight!=true) && (this.reboundLeft!=true)){
                 this.falling = true;
             }
 
@@ -297,7 +378,6 @@ game. Default is mario_frontWalk_0.png */
 
             if (pressedKeys.contains(KeyEvent.VK_A)) {
                 mario.setScale(mario.getScale() + 0.01);
-
             }
 
             if (pressedKeys.contains(KeyEvent.VK_S)) {
@@ -318,6 +398,7 @@ game. Default is mario_frontWalk_0.png */
                 int currSpeed = mario.getAnimationSpeed();
                 mario.setAnimationSpeed(currSpeed + 5);
             }
+
         }
     }
 
@@ -329,10 +410,6 @@ game. Default is mario_frontWalk_0.png */
     public void draw(Graphics g){
         super.draw(g);
         
-        //DRAW GROUND
-//        int groundY = (300 + mario.getUnscaledHeight());
-//        Rectangle ground = new Rectangle(0, groundY, (500-groundY), 1000);
-
 
 
         //CHECK IF LOSING OR WINNING SCREEN NEEDS TO BE SHOWN
@@ -363,7 +440,7 @@ game. Default is mario_frontWalk_0.png */
             g2d.dispose();
             Sprite display = new Sprite("display");
             display.setImage(img);
-            display.setPosition(new Point(30, 200));
+            display.setPosition(new Point(90, 200));
             display.draw(g);
         }
         else if(mario != null && win==true){
@@ -393,13 +470,14 @@ game. Default is mario_frontWalk_0.png */
             g2d.dispose();
             Sprite display = new Sprite("display");
             display.setImage(img);
-            display.setPosition(new Point(30, 200));
+            display.setPosition(new Point(90, 200));
             display.draw(g);
 
         }
         else {
             /* Same, just check for null in case a frame gets thrown in before Mario is initialized */
             if (mario != null) {
+
                 mario.draw(g);
 
                 //TEXT FOR KEEPING TRACK OF COLLISIONS
@@ -432,11 +510,25 @@ game. Default is mario_frontWalk_0.png */
                 display.setPosition(new Point(200, 10));
                 display.draw(g);
 
+                //DRAW GROUND
+                int groundY = (350);
+                g2d =( Graphics2D) g;
+                g2d.setPaint(new Color(0, 150, 0));
+                RenderingHints rh = new RenderingHints(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+
+                rh.put(RenderingHints.KEY_RENDERING,
+                        RenderingHints.VALUE_RENDER_QUALITY);
+
+                g2d.setRenderingHints(rh);
+                g2d.fillRect(0, groundY, 1000, 300);
             }
 
             if (earth != null) {
                 earth.draw(g);
             }
+
 
             if (trophy != null) {
                 trophy.draw(g);

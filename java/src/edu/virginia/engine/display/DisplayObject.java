@@ -288,7 +288,7 @@ public class DisplayObject {
 			 * (rotation, etc.)
 			 */
 			Graphics2D g2d = (Graphics2D) g;
-			g2d.draw(this.getHitbox());
+			//g2d.draw(this.getHitbox());
 			if (this.stationary) {
 				g2d.drawImage(displayImage, this.position.x,
 						this.position.y,
