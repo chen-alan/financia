@@ -1,0 +1,17 @@
+50/50 points: Reasonable attempt at implementing all the methods.
+5/5 points: Mario, some obstacles and a goal show up on the screen.
+5/5 points: The game has music as soon as you run the game.
+5/5 points: Score is displayed somewhere on the screen.
+5/5 points: Mario’s hitbox works when scaled.
+5/5 points: Mario’s hitbox works when rotated.
+5/5 points: Mario loses points if he collides with an obstacle.
+5/5 points: Mario creates a sound effect if he collides with an obstacle.
+5/5 points: Mario wins if he collides with a goal on the screen.
+5/5 points: Game stops when Mario wins.
+5/5 points: There is a congratulatory message when Mario wins.
+
+Total Grade: 100/100
+
+Comments:
+
+Great! Next time, be sure to remove the hitboxes from being drawn! I like that you can restart the game on a key press. Good extra feature.
