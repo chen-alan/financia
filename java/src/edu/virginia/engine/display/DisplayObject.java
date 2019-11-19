@@ -35,6 +35,7 @@ public class DisplayObject {
 	private Point parentPosition;
 	private double zoom;
 	private boolean stationary;
+	private boolean hasPhysics;
 
 
 	/**
@@ -53,6 +54,7 @@ public class DisplayObject {
 		this.parent = null;
 		this.parentPosition = new Point(0, 0);
 		this.zoom = 1;
+		this.hasPhysics = false;
 	}
 
 	public DisplayObject(String id, String fileName) {
@@ -68,6 +70,7 @@ public class DisplayObject {
 		this.parent = null;
 		this.parentPosition = new Point(0, 0);
 		this.zoom = 1;
+		this.hasPhysics = false;
 	}
 
 	public DisplayObject() {
@@ -82,6 +85,15 @@ public class DisplayObject {
 		this.parent = null;
 		this.parentPosition = new Point(0, 0);
 		this.zoom = 1;
+		this.hasPhysics = false;
+	}
+
+	public void setPhysics(boolean phys){
+		this.hasPhysics = phys;
+	}
+
+	public boolean getPhysics(){
+		return this.hasPhysics;
 	}
 
 	public void setStationary(boolean newStationary) {
@@ -155,6 +167,7 @@ public class DisplayObject {
 
 		return at.createTransformedShape(s);
     }
+
 
 	/**Metho.dds to set and get parent**/
 	public void setParent(DisplayObject newParent) {
@@ -275,7 +288,7 @@ public class DisplayObject {
 			 * (rotation, etc.)
 			 */
 			Graphics2D g2d = (Graphics2D) g;
-			g2d.draw(this.getHitbox());
+			//g2d.draw(this.getHitbox());
 			if (this.stationary) {
 				g2d.drawImage(displayImage, this.position.x,
 						this.position.y,

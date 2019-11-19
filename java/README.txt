@@ -1,9 +1,8 @@
-NOTE:
-We left the outline of our hitboxes in so it would be easier to see what's going on when grading.
-
 GAMEPLAY:
 The objective of the game is to reach the trophy in the bottom right corner.
 If mario collides with a planet, he loses a life.
+Mario flickers when he collides.
+If mario collides on top of the planet, he slips and slides down.
 When the number of lives reaches 0, you lose the game.
 The number of lives are displayed at the top of the screen.
 If you reach the trophy before losing all your lives, you win the game.
@@ -14,7 +13,10 @@ Music plays continuously throughout the game.
 Sound effects play with each collision, win, and loss.
 
 KEYS:
-Use arrow keys to move, and other keys as specified to transform mario.
+SPACE - makes mario jump
+UP - makes mario fly
+OTHER ARROWS - makes mario move
+Other keys as specified to transform mario.
 Pivot point moves in relation to mario.
 As with Lab 1, if mario is rotated, canvas moves slightly when pivot point is modified or scaling is used.
 Because of this, gameplay is best when mario is not rotated.
