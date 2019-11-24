@@ -16,6 +16,9 @@ import edu.virginia.engine.util.SoundManager;
  * */
 public class FinalProject extends Game{
 
+    //Background object
+    private DisplayObject background;
+
     //state variables
     private int state; //0=worldMap, 1=city1, 2=city2
     private int building; //0=none, 1=mayor, 2=bank, 3=store, 4=tutoring
@@ -25,14 +28,15 @@ public class FinalProject extends Game{
     private boolean collided;
     private boolean win;
 
-    /* Create a sprite object for our 		s = new Rectangle(this.position.x, this.position.y, (int) (this.displayImage.getWidth()), (int) (this.displayImage.getHeight()));
-game. Default is mario_frontWalk_0.png */
+    /*Create sprites*/
     AnimatedSprite mario = new AnimatedSprite("Mario",
             "animations"+ File.separator+"mario"+File.separator+"mario_frontWalk_0.png",
             new Point(0,0));
     Sprite earth = new Sprite("earth","solarSystem"+ File.separator+"earth.png",
             new Point(200,200));
     Sprite trophy = new Sprite("trophy", "trophy.png", new Point(447,400));
+
+    /*initialize sound manager*/
     SoundManager sounds = new SoundManager();
 
 
@@ -41,7 +45,7 @@ game. Default is mario_frontWalk_0.png */
      * Constructor. See constructor in Game.java for details on the parameters given
      * */
     public FinalProject() {
-        super("Lab Four", 500, 500);
+        super("Lab Four", 1000, 707);
 
         //set state
         state = 0;
@@ -53,6 +57,7 @@ game. Default is mario_frontWalk_0.png */
         colCount = 20;
         collided = false;
         win = false;
+        background = new DisplayObject("world", "backgrounds"+File.separator+"world.jpg");
 
         /*make new animations and add then to animated sprite*/
         mario.initializeFrames("mario");
@@ -69,7 +74,7 @@ game. Default is mario_frontWalk_0.png */
 
         //load and play sounds
         sounds.loadMusic("background", "background.wav");
-        sounds.playMusic("background");
+        //sounds.playMusic("background");
         sounds.loadSoundEffect("woohoo", "woohoo.wav");
         sounds.loadSoundEffect("bump", "bump.wav");
         sounds.loadSoundEffect("jump", "jump.wav");
@@ -87,9 +92,11 @@ game. Default is mario_frontWalk_0.png */
         return hitbox.intersects(otherHitboxRect);
     }
 
-    /** Draw game background based on state and building **/
-    public void drawBackground(){
-        
+    /** set background based on state and building **/
+    public void setBackground(){
+        if (state==0){
+            background.setImage(background.readImage("backgrounds"+File.separator+"world.jpg"));
+        }
     }
 
 
@@ -198,6 +205,10 @@ game. Default is mario_frontWalk_0.png */
     @Override
     public void draw(Graphics g){
         super.draw(g);
+
+        if(background!=null){
+            background.draw(g);
+        }
 
         //CHECK IF LOSING OR WINNING SCREEN NEEDS TO BE SHOWN
         if(mario!= null && colCount==0){
