@@ -47,6 +47,15 @@ public class FinalProject extends Game{
     private int city1Slides;
     private int city2Slides;
 
+    //tutoring center variables
+    private int currQuestionCity1; //current question number, -1 = no questions left
+    private boolean onQ; //on a question
+    private boolean onFeed; //on feedback
+    private boolean qPress; //key pressed
+    private boolean q1City1; //was this questions successfully answered?
+    private boolean q2City1;
+    private boolean q3City1;
+
 
     //state variables
     private int state; //0=worldMap, 1=city1, 2=city2
@@ -73,10 +82,21 @@ public class FinalProject extends Game{
         //set state
         state = 0;
         building = 0;
+
+        //set mayor variables
         slideNum = 0;
         nextSlide = false;
         city1Slides = 4; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
         city2Slides = 0; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
+
+        //set tutoring center variables
+        currQuestionCity1 = 1;
+        onQ = true;
+        onFeed = false;
+        qPress = false;
+        q1City1 = false;
+        q2City1 = false;
+        q3City1 = false;
 
         //set levels and balances
         level = 1;
@@ -249,6 +269,11 @@ public class FinalProject extends Game{
                 nextSlide = false;
             }
 
+        //reset tutoring boolean
+        if(pressedKeys.isEmpty() && qPress==true){
+            qPress = false;
+        }
+
             //COLLISION UPDATE CHECKS
             //collisions in world map
             if(state==0){
@@ -322,6 +347,10 @@ public class FinalProject extends Game{
                         String filename = ""+slideNum+".jpg";
                         background.setImage(background.readImage("mayorPres2" + File.separator + filename));
                     }
+                }
+
+                //TUTORING CENTER
+                else if(building==4 && currQuestionCity1!=-1){
 
                 }
 
@@ -354,6 +383,11 @@ public class FinalProject extends Game{
 
                 }
 
+                //TUTORING CENTER
+                else if(building==4 && currQuestionCity1!=-1){
+
+                }
+
                 //else mario moves as normal
                 else {
                     mario.setPosition(new Point(mario.getPosition().x + 2,
@@ -361,6 +395,63 @@ public class FinalProject extends Game{
                     mario.animate("rightWalk");
                 }
             }
+
+            //TUTORING CENTER KEY PRESSES
+            if(pressedKeys.contains(KeyEvent.VK_A)){
+                if (building==4 && onQ== true && qPress==false){
+                    qPress = true;
+                    if(state==1){ //in first city
+                        if(currQuestionCity1==1){ //a is wrong
+                            background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
+
+                        }
+                        else if(currQuestionCity1==2){ //a is right
+                            background.setImage(background.readImage("tutor1" + File.separator + "correct.jpg"));
+                            q2City1 = true;
+
+                        }
+                        else if(currQuestionCity1==3){ //a is wrong
+                            background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
+                        }
+
+                        //UPDATE: go to next question or display finished screen
+                        if(q1City1==true && q2City1==true && q3City1==true){
+                            currQuestionCity1= -1;
+                        }
+                        else{ //update to next question
+                            boolean currBool = false;
+                            int newQ = 0;
+                            while(currBool==false) {
+                                if (currQuestionCity1 != 3) {
+                                    newQ = currQuestionCity1 + 1;
+                                } else {
+                                    newQ = 1;
+                                }
+                                if (newQ == 1) {
+                                    currBool = q1City1;
+                                } else if (newQ == 2) {
+                                    currBool = q2City1;
+                                } else {
+                                    currBool = q3City1;
+                                }
+                            }
+                        }
+                        onQ = false;
+                        onFeed = true;
+                    }
+                }
+            }
+            if(pressedKeys.contains(KeyEvent.VK_B)){
+                if (building==4 && onQ== true){
+
+                }
+            }
+            if(pressedKeys.contains(KeyEvent.VK_C)){
+                if (building==4 && onQ== true){
+
+                }
+            }
+
             if (pressedKeys.contains(KeyEvent.VK_Q)) {
                 if(building!=0){
                     int newXpos = 0;
