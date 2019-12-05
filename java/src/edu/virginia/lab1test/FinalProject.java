@@ -47,6 +47,10 @@ public class FinalProject extends Game{
     private int city1Slides;
     private int city2Slides;
 
+    //bank variables
+    private int bankScreen; //0=home, 1=deposit, 2=withdraw, 3=pay bills, 4=updated, 5=error
+    private boolean bankPress; //key pressed
+
     //tutoring center variables
     private int currQuestionCity1; //current question number, -1 = no questions left
     private boolean onQ; //on a question
@@ -89,6 +93,10 @@ public class FinalProject extends Game{
         city1Slides = 4; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
         city2Slides = 0; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
 
+        //set bank variables
+        bankScreen = 0;
+        bankPress = false;
+
         //set tutoring center variables
         currQuestionCity1 = 1;
         onQ = true;
@@ -100,7 +108,7 @@ public class FinalProject extends Game{
 
         //set levels and balances
         level = 1;
-        cashBal = 10;
+        cashBal = 0;
         accountBal = 0;
 
         //INITIALIZE ALL OBJECTS
@@ -206,15 +214,25 @@ public class FinalProject extends Game{
         }
         //bank
         else if(building==2){
-            background.setImage(background.readImage("backgrounds"+File.separator+"atm.jpg"));
+            background.setImage(background.readImage("bankScreens"+File.separator+"home.jpg"));
         }
         //shop
         else if(building==3){
             background.setImage(background.readImage("backgrounds"+File.separator+"market.jpg"));
         }
-        //shop
+        //tutoring center
         else if(building==4){
-            background.setImage(background.readImage("backgrounds"+File.separator+"classroom.jpg"));
+            if (state==1) {
+                if (currQuestionCity1!=-1) {
+                    String filename = "" + currQuestionCity1 + ".jpg";
+                    background.setImage(background.readImage("tutor1" + File.separator + filename));
+                }
+                else{
+                    background.setImage(background.readImage("tutor1" + File.separator + "done.jpg"));
+                }
+                onFeed = false;
+                onQ = true;
+            }
         }
     }
 
@@ -268,11 +286,15 @@ public class FinalProject extends Game{
             if(pressedKeys.isEmpty() && nextSlide==true){
                 nextSlide = false;
             }
+            //reset bank boolean
+            if(pressedKeys.isEmpty() && bankPress==true){
+                bankPress = false;
+            }
 
-        //reset tutoring boolean
-        if(pressedKeys.isEmpty() && qPress==true){
-            qPress = false;
-        }
+            //reset tutoring boolean
+            if(pressedKeys.isEmpty() && qPress==true){
+                qPress = false;
+            }
 
             //COLLISION UPDATE CHECKS
             //collisions in world map
@@ -350,8 +372,17 @@ public class FinalProject extends Game{
                 }
 
                 //TUTORING CENTER
-                else if(building==4 && currQuestionCity1!=-1){
-
+                else if(building==4 && onFeed==true && qPress == false){
+                    qPress = true;
+                    if (currQuestionCity1!=-1) {
+                        String filename = "" + currQuestionCity1 + ".jpg";
+                        background.setImage(background.readImage("tutor1" + File.separator + filename));
+                    }
+                    else{
+                        background.setImage(background.readImage("tutor1" + File.separator + "done.jpg"));
+                    }
+                    onFeed = false;
+                    onQ = true;
                 }
 
                 //else mario moves as normal
@@ -384,8 +415,17 @@ public class FinalProject extends Game{
                 }
 
                 //TUTORING CENTER
-                else if(building==4 && currQuestionCity1!=-1){
-
+                else if(building==4 && onFeed==true && qPress == false){
+                    qPress = true;
+                    if (currQuestionCity1!=-1) {
+                        String filename = "" + currQuestionCity1 + ".jpg";
+                        background.setImage(background.readImage("tutor1" + File.separator + filename));
+                    }
+                    else{
+                        background.setImage(background.readImage("tutor1" + File.separator + "done.jpg"));
+                    }
+                    onFeed = false;
+                    onQ = true;
                 }
 
                 //else mario moves as normal
@@ -398,17 +438,56 @@ public class FinalProject extends Game{
 
             //TUTORING CENTER KEY PRESSES
             if(pressedKeys.contains(KeyEvent.VK_A)){
-                if (building==4 && onQ== true && qPress==false){
+
+                //BANK
+                if (building==2 && bankPress==false && (bankScreen==0||bankScreen==1||bankScreen==2)){
+                    bankPress = true;
+                    if (bankScreen == 0){ //home screen
+                        bankScreen = 1; //set to deposit
+                        background.setImage(background.readImage("bankScreens" + File.separator + "deposit.jpg"));
+                    }
+                    else if (bankScreen == 1){ //deposit
+                        if(cashBal < 1){ //error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal - 1;
+                            accountBal = accountBal + 1;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else{ //withdraw
+                        if(accountBal < 1){
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal + 1;
+                            accountBal = accountBal - 1;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                }
+
+                //TUTORING CENTER
+                else if (building==4 && onQ== true && qPress==false && currQuestionCity1!=-1){
                     qPress = true;
                     if(state==1){ //in first city
                         if(currQuestionCity1==1){ //a is wrong
                             background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
-
                         }
                         else if(currQuestionCity1==2){ //a is right
                             background.setImage(background.readImage("tutor1" + File.separator + "correct.jpg"));
                             q2City1 = true;
-
+                            accountBal = accountBal + 5;
+                            accountDisp.setImage(updateProgress(accountBal));
                         }
                         else if(currQuestionCity1==3){ //a is wrong
                             background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
@@ -419,22 +498,19 @@ public class FinalProject extends Game{
                             currQuestionCity1= -1;
                         }
                         else{ //update to next question
-                            boolean currBool = false;
-                            int newQ = 0;
-                            while(currBool==false) {
-                                if (currQuestionCity1 != 3) {
-                                    newQ = currQuestionCity1 + 1;
+                            int newQ = currQuestionCity1;
+                            while(true) {
+                                //go through question numbers
+                                if (newQ != 3) {
+                                    newQ = newQ + 1;
                                 } else {
                                     newQ = 1;
                                 }
-                                if (newQ == 1) {
-                                    currBool = q1City1;
-                                } else if (newQ == 2) {
-                                    currBool = q2City1;
-                                } else {
-                                    currBool = q3City1;
+                                if ((newQ == 1 && q1City1==false)|| (newQ == 2 && q2City1==false) || (newQ==3 && q3City1 == false)) {
+                                    break;
                                 }
                             }
+                            currQuestionCity1 = newQ;
                         }
                         onQ = false;
                         onFeed = true;
@@ -442,15 +518,376 @@ public class FinalProject extends Game{
                 }
             }
             if(pressedKeys.contains(KeyEvent.VK_B)){
-                if (building==4 && onQ== true){
 
+                //BANK
+                if (building==2 && bankPress==false && (bankScreen==0||bankScreen==1||bankScreen==2)){
+                    bankPress = true;
+                    if (bankScreen == 0){ //home screen
+                        bankScreen = 2; //set to withdraw
+                        background.setImage(background.readImage("bankScreens" + File.separator + "withdraw.jpg"));
+                    }
+                    else if (bankScreen == 1){ //deposit
+                        if(cashBal < 2){ //error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal - 2;
+                            accountBal = accountBal + 2;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else{ //withdraw
+                        if(accountBal < 2){
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal + 2;
+                            accountBal = accountBal - 2;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                }
+
+                //TUTORING CENTER
+                if (building==4 && onQ== true && qPress==false && currQuestionCity1!=-1){
+                    qPress = true;
+                    if(state==1){ //in first city
+                        if(currQuestionCity1==1){ //b is right
+                            background.setImage(background.readImage("tutor1" + File.separator + "correct.jpg"));
+                            q1City1 = true;
+                            accountBal = accountBal + 5;
+                            accountDisp.setImage(updateProgress(accountBal));
+                        }
+                        else if(currQuestionCity1==2){ //b is wrong
+                            background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
+                        }
+                        else if(currQuestionCity1==3){ //b is right
+                            background.setImage(background.readImage("tutor1" + File.separator + "correct.jpg"));
+                            q3City1 = true;
+                            accountBal = accountBal + 5;
+                            accountDisp.setImage(updateProgress(accountBal));
+                        }
+
+                        //UPDATE: go to next question or display finished screen
+                        if(q1City1==true && q2City1==true && q3City1==true){
+                            currQuestionCity1= -1;
+                        }
+                        else{ //update to next question
+                            int newQ = currQuestionCity1;
+                            while(true) {
+                                //go through question numbers
+                                if (newQ != 3) {
+                                    newQ = newQ + 1;
+                                } else {
+                                    newQ = 1;
+                                }
+                                if ((newQ == 1 && q1City1==false)|| (newQ == 2 && q2City1==false) || (newQ==3 && q3City1 == false)) {
+                                    break;
+                                }
+                            }
+                            currQuestionCity1 = newQ;
+                        }
+                        onQ = false;
+                        onFeed = true;
+                    }
                 }
             }
             if(pressedKeys.contains(KeyEvent.VK_C)){
-                if (building==4 && onQ== true){
 
+                //BANK
+                if (building==2 && bankPress==false && (bankScreen==0||bankScreen==1||bankScreen==2)){
+                    bankPress = true;
+                    if (bankScreen == 0){ //home screen
+                        bankScreen = 3; //set to pay bills
+                        background.setImage(background.readImage("bankScreens" + File.separator + "bill.jpg"));
+                    }
+                    else if (bankScreen == 1){ //deposit
+                        if(cashBal < 5){ //error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal - 5;
+                            accountBal = accountBal + 5;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else{ //withdraw
+                        if(accountBal < 5){
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal + 5;
+                            accountBal = accountBal - 5;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                }
+
+                //TUTORING CENTER
+                if (building==4 && onQ== true && qPress==false && currQuestionCity1!=-1){
+                    qPress = true;
+                    if(state==1){ //in first city
+                        if(currQuestionCity1==1){ //c is wrong
+                            background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
+                        }
+                        else if(currQuestionCity1==2){ //c is wrong
+                            background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
+                        }
+                        else if(currQuestionCity1==3){ //c is wrong
+                            background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
+                        }
+
+                        //UPDATE: go to next question or display finished screen
+                        if(q1City1==true && q2City1==true && q3City1==true){
+                            currQuestionCity1= -1;
+                        }
+                        else{ //update to next question
+                            int newQ = currQuestionCity1;
+                            while(true) {
+                                //go through question numbers
+                                if (newQ != 3) {
+                                    newQ = newQ + 1;
+                                } else {
+                                    newQ = 1;
+                                }
+                                if ((newQ == 1 && q1City1==false)|| (newQ == 2 && q2City1==false) || (newQ==3 && q3City1 == false)) {
+                                    break;
+                                }
+                            }
+                            currQuestionCity1 = newQ;
+                        }
+                        onQ = false;
+                        onFeed = true;
+                    }
                 }
             }
+
+            if(pressedKeys.contains(KeyEvent.VK_D)){
+                //BANK
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                    bankPress = true;
+                    if (bankScreen == 1){ //deposit
+                        if(cashBal < 10){ //error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal - 10;
+                            accountBal = accountBal + 10;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else{ //withdraw
+                        if(accountBal < 10){
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal + 10;
+                            accountBal = accountBal - 10;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                }
+            }
+
+            if(pressedKeys.contains(KeyEvent.VK_E)){
+                //BANK
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                    bankPress = true;
+                    if (bankScreen == 1){ //deposit
+                        if(cashBal < 20){ //error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal - 20;
+                            accountBal = accountBal + 20;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else{ //withdraw
+                        if(accountBal < 20){
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal + 20;
+                            accountBal = accountBal - 20;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                }
+            }
+
+            if(pressedKeys.contains(KeyEvent.VK_F)){
+                //BANK
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                    bankPress = true;
+                    if (bankScreen == 1){ //deposit
+                        if(cashBal < 50){ //error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal - 50;
+                            accountBal = accountBal + 50;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else{ //withdraw
+                        if(accountBal < 50){
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal + 50;
+                            accountBal = accountBal - 50;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                }
+            }
+
+            if(pressedKeys.contains(KeyEvent.VK_G)){
+                //BANK
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                    bankPress = true;
+                    if (bankScreen == 1){ //deposit
+                        if(cashBal < 100){ //error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal - 100;
+                            accountBal = accountBal + 100;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else{ //withdraw
+                        if(accountBal < 100){
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal + 100;
+                            accountBal = accountBal - 100;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                }
+            }
+
+            if(pressedKeys.contains(KeyEvent.VK_H)){
+                //BANK
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                    bankPress = true;
+                    if (bankScreen == 1){ //deposit
+                        if(cashBal < 500){ //error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal - 500;
+                            accountBal = accountBal + 500;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else{ //withdraw
+                        if(accountBal < 500){
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal + 500;
+                            accountBal = accountBal - 500;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                }
+            }
+
+            if(pressedKeys.contains(KeyEvent.VK_I)){
+                //BANK
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                    bankPress = true;
+                    if (bankScreen == 1){ //deposit
+                        if(cashBal < 1000){ //error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal - 1000;
+                            accountBal = accountBal + 1000;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else{ //withdraw
+                        if(accountBal < 1000){
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        }
+                        else{
+                            cashBal = cashBal + 1000;
+                            accountBal = accountBal - 1000;
+                            cashDisp.setImage(updateProgress(cashBal));
+                            accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                }
+            }
+
 
             if (pressedKeys.contains(KeyEvent.VK_Q)) {
                 if(building!=0){
@@ -462,6 +899,13 @@ public class FinalProject extends Game{
                     building=0;
                     this.setBackground();
                     mario.setPosition(new Point(newXpos, 490));
+                }
+            }
+
+            if (pressedKeys.contains(KeyEvent.VK_Z)){
+                if(building==2){ //bank
+                    bankScreen = 0;
+                    background.setImage(background.readImage("bankScreens" + File.separator + "home.jpg"));
                 }
             }
     }
