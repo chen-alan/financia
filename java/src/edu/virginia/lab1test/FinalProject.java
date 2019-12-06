@@ -60,9 +60,11 @@ public class FinalProject extends Game{
     //Message objects
     private DisplayObject msg1;
     private DisplayObject msg2;
+    private DisplayObject msg2Fail;
     private DisplayObject msg3;
     private boolean showtask1;
     private boolean showtask2;
+    private boolean show2Fail;
     private boolean showtask3;
 
     //Payment option objects
@@ -88,6 +90,17 @@ public class FinalProject extends Game{
     private DisplayObject ice1icon;
     private DisplayObject ice2icon;
     private DisplayObject ice3icon;
+
+    //TASK2 school supply objects
+    private DisplayObject marker;
+    private DisplayObject notebook;
+    private DisplayObject pencil;
+    private boolean markerBought;
+    private boolean notebookBought;
+    private boolean pencilBought;
+    private DisplayObject markerIcon;
+    private DisplayObject pencilIcon;
+    private DisplayObject notebookIcon;
 
     //mayor presentation slide variables
     private int slideNum;
@@ -143,7 +156,7 @@ public class FinalProject extends Game{
         //set mayor variables
         slideNum = 0;
         nextSlide = false;
-        city1Slides = 4; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
+        city1Slides = 15; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
         city2Slides = 0; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
 
         //set bank variables
@@ -186,12 +199,15 @@ public class FinalProject extends Game{
         //message objects
         msg1 = new DisplayObject("msg1", "messages"+File.separator+"1.png");
         msg2 = new DisplayObject("msg2", "messages"+File.separator+"2.png");
+        msg2Fail = new DisplayObject("msg2Fail", "messages"+ File.separator+"2a.png");
         msg3 = new DisplayObject("msg3", "messages"+File.separator+"3.png");
         msg1.setPosition(new Point(325, 520));
         msg2.setPosition(new Point(325, 520));
+        msg2Fail.setPosition(new Point(325, 520));
         msg3.setPosition(new Point(325, 520));
         showtask1=false;
         showtask2=false;
+        show2Fail = false;
         showtask3=false;
 
         //store messages
@@ -227,6 +243,19 @@ public class FinalProject extends Game{
         ice2Bought = false;
         ice3Bought = false;
 
+        //school supply objects for TASK 2
+        marker = new DisplayObject("marker", "markers"+File.separator+"marker.png");
+        notebook = new DisplayObject("notebook", "markers"+File.separator+"notebook.jpg");
+        pencil = new DisplayObject("pencil", "markers"+File.separator+"pencil.png");
+        marker.setPosition(new Point(200, 230));
+        notebook.setPosition(new Point(400, 230));
+        pencil.setPosition(new Point(600, 230));
+        markerIcon = new DisplayObject("markerIcon", "markers"+File.separator+"markerS.png");
+        notebookIcon = new DisplayObject("notebookIcon", "markers"+File.separator+"notebookS.jpg");
+        pencilIcon = new DisplayObject("pencilIcon", "markers"+File.separator+"pencilS.png");
+        markerBought = false;
+        notebookBought = false;
+        pencilBought = false;
 
         //city 1 and 2 in world map
         city1 = new DisplayObject("city1", "buildingsIcons"+File.separator+"city1icon.png");
@@ -332,6 +361,7 @@ public class FinalProject extends Game{
         //shop
         else if(building==3){
             background.setImage(background.readImage("backgrounds"+File.separator+"market.jpg"));
+            mario.setPosition(new Point(200, 500));
         }
         //tutoring center
         else if(building==4){
@@ -438,11 +468,12 @@ public class FinalProject extends Game{
                     mario.setPosition(new Point(480, 500));
                     showtask1=false;
                     showtask2=false;
+                    show2Fail = false;
                     showtask3=false;
                 }
 
                 //npc collisions
-                if(this.collidesWith(npc1)&&level==1&&building==0){
+                if(this.collidesWith(npc1)&&level==1&&building==0&&state==1){
                     if(ice1Bought==true||ice2Bought==true||ice3Bought==true) {
                         //LEVEL UP
                         level1Done = true;
@@ -455,10 +486,24 @@ public class FinalProject extends Game{
                         showtask1=true;
                     }
                 }
-                if(this.collidesWith(npc2)&&level==2&&building==0){
-                    showtask2=true;
+                if(this.collidesWith(npc2)&&level==2&&building==0&&state==1){
+                    if(markerBought==true){
+                        //LEVEL UP
+                        level2Done = true;
+                        nextPurchase = 0;
+                        levelUp = true;
+                        level = 3;
+                        levelDisp.setImage(updateProgress(level));
+                    }
+                    else if(pencilBought==true||notebookBought==true){
+                        showtask2 = false;
+                        show2Fail = true;
+                    }
+                    else {
+                        showtask2 = true;
+                    }
                 }
-                if(this.collidesWith(npc3)&&level==3&&building==0){
+                if(this.collidesWith(npc3)&&level==3&&building==0&&state==2){
                     showtask3=true;
                 }
 
@@ -469,24 +514,28 @@ public class FinalProject extends Game{
                         this.setBackground();
                         showtask1=false;
                         showtask2=false;
+                        show2Fail = false;
                         showtask3=false;
                     } else if (this.collidesWith(bank)) {
                         building = 2;
                         this.setBackground();
                         showtask1=false;
                         showtask2=false;
+                        show2Fail = false;
                         showtask3=false;
                     } else if (this.collidesWith(shop)) {
                         building = 3;
                         this.setBackground();
                         showtask1=false;
                         showtask2=false;
+                        show2Fail = false;
                         showtask3=false;
                     } else if (this.collidesWith(tutorial)) {
                         building = 4;
                         this.setBackground();
                         showtask1=false;
                         showtask2=false;
+                        show2Fail = false;
                         showtask3=false;
                     }
                 }
@@ -526,6 +575,47 @@ public class FinalProject extends Game{
                             cashDisp.setImage(updateProgress(cashBal));
                             ice3icon.setPosition(new Point(nextPurchase, 610));
                             ice3Bought = true;
+                            storeMessage=1; //success
+                            nextPurchase = nextPurchase + 60;
+                        }
+                    }
+                }
+                else if (building==3&&level==2){//STORE COLLISIONS FOR LEVEL 2
+                    if(this.collidesWith(marker) && markerBought==false &&storeMessage==0){
+                        if(accountBal < 5){
+                            storeMessage=2; //error
+                        }
+                        else{
+                            accountBal = accountBal - 5;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            markerIcon.setPosition(new Point(nextPurchase, 610));
+                            markerBought = true;
+                            storeMessage=1; //success
+                            nextPurchase = nextPurchase + 60;
+                        }
+                    }
+                    else if(this.collidesWith(notebook) && notebookBought==false&&storeMessage==0){
+                        if(accountBal < 7){
+                            storeMessage=2; //error
+                        }
+                        else{
+                            accountBal = accountBal - 7;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            notebookIcon.setPosition(new Point(nextPurchase, 610));
+                            notebookBought = true;
+                            storeMessage=1; //success
+                            nextPurchase = nextPurchase + 60;
+                        }
+                    }
+                    else if(this.collidesWith(pencil) && pencilBought==false&&storeMessage==0){
+                        if(accountBal < 10){
+                            storeMessage=2; //error
+                        }
+                        else{
+                            accountBal = accountBal - 10;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            pencilIcon.setPosition(new Point(nextPurchase, 610));
+                            pencilBought = true;
                             storeMessage=1; //success
                             nextPurchase = nextPurchase + 60;
                         }
@@ -1154,13 +1244,14 @@ public class FinalProject extends Game{
         }
         else if(building==0){
             //draw corresponding NPC
-            if(level==1){ npc1.draw(g); }
-            else if(level==2){ npc2.draw(g); }
-            else{ npc3.draw(g); }
+            if(level==1&&state==1){ npc1.draw(g); }
+            else if(level==2&&state==1){ npc2.draw(g); }
+            else if (level==3&&state==2){ npc3.draw(g); }
 
             //draw messages
             if(showtask1==true){ msg1.draw(g); }
             else if(showtask2==true){ msg2.draw(g); }
+            else if(show2Fail==true){ msg2Fail.draw(g); }
             else if (showtask3==true){ msg3.draw(g); }
 
             //draw buildings
@@ -1177,10 +1268,37 @@ public class FinalProject extends Game{
                 tutorial.draw(g);
             }
         } else if (building == 3 && level == 1) {
-            ice1.draw(g);
-            ice2.draw(g);
-            ice3.draw(g);
+            if(ice1Bought==false) {
+                ice1.draw(g);
+            }
+            if(ice2Bought==false) {
+                ice2.draw(g);
+            }
+            if(ice3Bought==false) {
+                ice3.draw(g);
+            }
             payCash.draw(g);
+
+            if(storeMessage!=0){
+                if(storeMessage==1){
+                    storeSuccess.draw(g);
+                }
+                else{
+                    storeError.draw(g);
+                }
+            }
+        }
+        else if (building == 3 && level == 2) {
+            if(markerBought==false) {
+                marker.draw(g);
+            }
+            if(notebookBought==false) {
+                notebook.draw(g);
+            }
+            if(pencilBought==false) {
+                pencil.draw(g);
+            }
+            payDebit.draw(g);
 
             if(storeMessage!=0){
                 if(storeMessage==1){
@@ -1212,6 +1330,17 @@ public class FinalProject extends Game{
             }
             if(ice3Bought==true){
                 ice3icon.draw(g);
+            }
+        }
+        else if(level1Done && level2Done == false){
+            if(markerBought==true){
+                markerIcon.draw(g);
+            }
+            if(notebookBought==true){
+                notebookIcon.draw(g);
+            }
+            if(pencilBought==true){
+                pencilIcon.draw(g);
             }
         }
 
