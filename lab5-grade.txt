@@ -1,0 +1,27 @@
+
+Required Elements:
+20/25 points: Everything in your previous lab still works.
+10/10 points: There is gravity in your game:
+10/15 points: Collision resolution/ bounciness works well
+
+Extra Credit:
+5 points per extra physics feature successfully implemented:
+	X/5 points: Collision resolution that depends on mass
+	X/5 points: Acceleration while moving, instead of constant speed, when you press arrow keys.
+	X/5 points:  Acceleration while moving if go into turbo speed mode with a button press
+	X/5 points: Particles/sparks when collisions occur
+	5/5 points: Animations during collisions
+	X/5 points: Any extra feature you have in your README
+
+Maximum: 10 extra credit points
+
+Total Extra Credit: 5/10
+
+————————
+
+Total Grade: 45/50
+
+Comments:
+
+Overall, good job! Just a couple key elements missing. You lost points on the first bullet because the continuous background music was gone.
+The collisions were ok from the side, but when you hit the top and slide off, you go way off screen, and the game stops being playable. 
