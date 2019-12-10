@@ -354,7 +354,6 @@ game. Default is mario_frontWalk_0.png */
                 display.setImage(img);
                 display.setPosition(new Point(200, 10));
                 display.draw(g);
-
             }
 
             if (earth != null) {
