@@ -128,12 +128,16 @@ public class FinalProject extends Game{
 
     //tutoring center variables
     private int currQuestionCity1; //current question number, -1 = no questions left
+    private int currQuestionCity2; //current question number, -1 = no questions left
     private boolean onQ; //on a question
     private boolean onFeed; //on feedback
     private boolean qPress; //key pressed
     private boolean q1City1; //were these questions successfully answered?
     private boolean q2City1;
     private boolean q3City1;
+    private boolean q1City2; //were these questions successfully answered?
+    private boolean q2City2; //were these questions successfully answered?
+    private boolean q3City2; //were these questions successfully answered?
 
 
     //state variables
@@ -179,12 +183,17 @@ public class FinalProject extends Game{
 
         //set tutoring center variables
         currQuestionCity1 = 1;
+        currQuestionCity2 = 1;
         onQ = true;
         onFeed = false;
         qPress = false;
         q1City1 = false;
         q2City1 = false;
         q3City1 = false;
+        q1City2 = false;
+        q2City2 = false;
+        q3City2 = false;
+
 
         //set levels and balances
         level = 1;
@@ -409,6 +418,16 @@ public class FinalProject extends Game{
                 onFeed = false;
                 onQ = true;
             }
+            if (state==2) {
+                if (currQuestionCity2 != -1) {
+                    String filename = "" + currQuestionCity2 + ".jpg";
+                    background.setImage(background.readImage("tutor2" + File.separator + filename));
+                } else {
+                    background.setImage(background.readImage("tutor2" + File.separator + "done.jpg"));
+                }
+                onFeed = false;
+                onQ = true;
+            }
         }
     }
 
@@ -565,14 +584,12 @@ public class FinalProject extends Game{
                         show2Fail = false;
                         showtask3=false;
                     } else if (this.collidesWith(tutorial)) {
-                        if (level != 3) {
-                            building = 4;
-                            this.setBackground();
-                            showtask1 = false;
-                            showtask2 = false;
-                            show2Fail = false;
-                            showtask3 = false;
-                        }
+                        building = 4;
+                        this.setBackground();
+                        showtask1 = false;
+                        showtask2 = false;
+                        show2Fail = false;
+                        showtask3 = false;
                     }
                 }
                 else if(building==3&&level==1){ //STORE COLLISIONS FOR LEVEL 1
