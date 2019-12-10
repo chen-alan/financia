@@ -469,7 +469,7 @@ public class FinalProject extends Game{
     public void update(ArrayList<Integer> pressedKeys){
         super.update(pressedKeys);
 
-            System.out.println("bankScreen: " + this.bankScreen + "\t state: " + this.state);
+            System.out.println("q1,q2,q3 city2: " + this.q1City2 + "" + this.q2City2 + "" + this.q3City2 + "\t state: " + this.state);
             //Movement of mario
             if (mario != null) mario.update(pressedKeys);
             if (pressedKeys.isEmpty() && (mario != null)) {
@@ -744,6 +744,14 @@ public class FinalProject extends Game{
                     else{
                         background.setImage(background.readImage("tutor1" + File.separator + "done.jpg"));
                     }
+                    if (state == 2) {
+                        if (currQuestionCity2 != -1) {
+                            String filename = "" + currQuestionCity2 + ".jpg";
+                            background.setImage(background.readImage("tutor2" + File.separator + filename));
+                        } else {
+                            background.setImage(background.readImage("tutor2" + File.separator + "done.jpg"));
+                        }
+                    }
                     onFeed = false;
                     onQ = true;
                 }
@@ -786,6 +794,14 @@ public class FinalProject extends Game{
                     }
                     else{
                         background.setImage(background.readImage("tutor1" + File.separator + "done.jpg"));
+                    }
+                    if (state == 2) {
+                        if (currQuestionCity2 != -1) {
+                            String filename = "" + currQuestionCity2 + ".jpg";
+                            background.setImage(background.readImage("tutor2" + File.separator + filename));
+                        } else {
+                            background.setImage(background.readImage("tutor2" + File.separator + "done.jpg"));
+                        }
                     }
                     onFeed = false;
                     onQ = true;
@@ -879,6 +895,46 @@ public class FinalProject extends Game{
                         onFeed = true;
                     }
                 }
+
+                else if (building==4 && onQ== true && qPress==false && currQuestionCity2!=-1 && state == 2){
+                    qPress = true;
+                    if(state==2){ //in first city
+                        if(currQuestionCity2==2){ //a is wrong
+                            background.setImage(background.readImage("tutor2" + File.separator + "wrong.jpg"));
+                        }
+                        else if(currQuestionCity2==1){ //a is right
+                            background.setImage(background.readImage("tutor2" + File.separator + "correct.jpg"));
+                            q1City2 = true;
+                            accountBal = accountBal + 5;
+                            accountDisp.setImage(updateProgress(accountBal));
+                        }
+                        else if(currQuestionCity2==3){ //a is wrong
+                            background.setImage(background.readImage("tutor2" + File.separator + "wrong.jpg"));
+                        }
+
+                        //UPDATE: go to next question or display finished screen
+                        if(q1City2==true && q2City2==true && q3City2==true){
+                            currQuestionCity2= -1;
+                        }
+                        else{ //update to next question
+                            int newQ = currQuestionCity2;
+                            while(true) {
+                                //go through question numbers
+                                if (newQ != 3) {
+                                    newQ = newQ + 1;
+                                } else {
+                                    newQ = 1;
+                                }
+                                if ((newQ == 1 && q1City2==false)|| (newQ == 2 && q2City2==false) || (newQ==3 && q3City2 == false)) {
+                                    break;
+                                }
+                            }
+                            currQuestionCity2 = newQ;
+                        }
+                        onQ = false;
+                        onFeed = true;
+                    }
+                }
             }
             if(pressedKeys.contains(KeyEvent.VK_B)){
 
@@ -962,6 +1018,45 @@ public class FinalProject extends Game{
                         onFeed = true;
                     }
                 }
+                else if (building==4 && onQ== true && qPress==false && currQuestionCity2!=-1 && state == 2){
+                    qPress = true;
+                    if(state==2){ //in first city
+                        if(currQuestionCity2==1){ //b is wrong
+                            background.setImage(background.readImage("tutor2" + File.separator + "wrong.jpg"));
+                        }
+                        else if(currQuestionCity2==2){ //b is right
+                            background.setImage(background.readImage("tutor2" + File.separator + "correct.jpg"));
+                            q2City2 = true;
+                            accountBal = accountBal + 5;
+                            accountDisp.setImage(updateProgress(accountBal));
+                        }
+                        else if(currQuestionCity2==3){ //b is wrong
+                            background.setImage(background.readImage("tutor2" + File.separator + "wrong.jpg"));
+                        }
+
+                        //UPDATE: go to next question or display finished screen
+                        if(q1City2==true && q2City2==true && q3City2==true){
+                            currQuestionCity2= -1;
+                        }
+                        else{ //update to next question
+                            int newQ = currQuestionCity2;
+                            while(true) {
+                                //go through question numbers
+                                if (newQ != 3) {
+                                    newQ = newQ + 1;
+                                } else {
+                                    newQ = 1;
+                                }
+                                if ((newQ == 1 && q1City2==false)|| (newQ == 2 && q2City2==false) || (newQ==3 && q3City2 == false)) {
+                                    break;
+                                }
+                            }
+                            currQuestionCity2 = newQ;
+                        }
+                        onQ = false;
+                        onFeed = true;
+                    }
+                }
             }
             if(pressedKeys.contains(KeyEvent.VK_C)){
 
@@ -1034,6 +1129,45 @@ public class FinalProject extends Game{
                                 }
                             }
                             currQuestionCity1 = newQ;
+                        }
+                        onQ = false;
+                        onFeed = true;
+                    }
+                }
+                else if (building==4 && onQ== true && qPress==false && currQuestionCity2!=-1 && state == 2){
+                    qPress = true;
+                    if(state==2){ //in first city
+                        if(currQuestionCity2==2){ //c is wrong
+                            background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
+                        }
+                        else if(currQuestionCity2==3){ //c is right
+                            background.setImage(background.readImage("tutor1" + File.separator + "correct.jpg"));
+                            q3City2 = true;
+                            accountBal = accountBal + 5;
+                            accountDisp.setImage(updateProgress(accountBal));
+                        }
+                        else if(currQuestionCity2==1){ //c is wrong
+                            background.setImage(background.readImage("tutor1" + File.separator + "wrong.jpg"));
+                        }
+
+                        //UPDATE: go to next question or display finished screen
+                        if(q1City2==true && q2City2==true && q3City2==true){
+                            currQuestionCity2= -1;
+                        }
+                        else{ //update to next question
+                            int newQ = currQuestionCity2;
+                            while(true) {
+                                //go through question numbers
+                                if (newQ != 3) {
+                                    newQ = newQ + 1;
+                                } else {
+                                    newQ = 1;
+                                }
+                                if ((newQ == 1 && q1City2==false)|| (newQ == 2 && q2City2==false) || (newQ==3 && q3City2 == false)) {
+                                    break;
+                                }
+                            }
+                            currQuestionCity2 = newQ;
                         }
                         onQ = false;
                         onFeed = true;
