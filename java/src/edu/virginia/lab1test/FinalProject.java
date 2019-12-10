@@ -105,6 +105,17 @@ public class FinalProject extends Game{
     private DisplayObject pencilIcon;
     private DisplayObject notebookIcon;
 
+    //TASK3 gourmet ice cream objects
+    private DisplayObject gice1;
+    private DisplayObject gice2;
+    private DisplayObject gice3;
+    private boolean gice1Bought;
+    private boolean gice2Bought;
+    private boolean gice3Bought;
+    private DisplayObject gice1icon;
+    private DisplayObject gice2icon;
+    private DisplayObject gice3icon;
+
     //mayor presentation slide variables
     private int slideNum;
     private boolean nextSlide;
@@ -260,6 +271,20 @@ public class FinalProject extends Game{
         markerBought = false;
         notebookBought = false;
         pencilBought = false;
+
+        //ice cream objects for TASK 3
+        gice1 = new DisplayObject("gice1", "iceCream"+File.separator+"0.png");
+        gice2 = new DisplayObject("gice2", "iceCream"+File.separator+"1.png");
+        gice3 = new DisplayObject("gice3", "iceCream"+File.separator+"2.png");
+        gice1.setPosition(new Point(200, 230));
+        gice2.setPosition(new Point(400, 230));
+        gice3.setPosition(new Point(600, 230));
+        gice1icon = new DisplayObject("gice1icon", "iceCream"+File.separator+"0s.png");
+        gice2icon = new DisplayObject("gice2icon", "iceCream"+File.separator+"1s.png");
+        gice3icon = new DisplayObject("gice3icon", "iceCream"+File.separator+"2s.png");
+        gice1Bought = false;
+        gice2Bought = false;
+        gice3Bought = false;
 
         //city 1 and 2 in world map
         city1 = new DisplayObject("city1", "buildingsIcons"+File.separator+"city1icon.png");
@@ -632,7 +657,32 @@ public class FinalProject extends Game{
                         }
                     }
                 }
-
+                else if(building==3&&level==3){ //STORE COLLISIONS FOR LEVEL 3
+                    if(this.collidesWith(gice1) && gice1Bought==false &&storeMessage==0){
+                        creditBal = creditBal + 3;
+                        creditDisp.setImage(updateProgress(creditBal));
+                        gice1icon.setPosition(new Point(nextPurchase, 610));
+                        gice1Bought = true;
+                        storeMessage=1; //success
+                        nextPurchase = nextPurchase + 60;
+                    }
+                    else if(this.collidesWith(gice2) && gice2Bought==false&&storeMessage==0){
+                        creditBal = creditBal + 5;
+                        creditDisp.setImage(updateProgress(creditBal));
+                        gice2icon.setPosition(new Point(nextPurchase, 610));
+                        gice2Bought = true;
+                        storeMessage=1; //success
+                        nextPurchase = nextPurchase + 60;
+                    }
+                    else if(this.collidesWith(gice3) && gice3Bought==false&&storeMessage==0){
+                        creditBal = creditBal + 10;
+                        creditDisp.setImage(updateProgress(creditBal));
+                        gice3icon.setPosition(new Point(nextPurchase, 610));
+                        gice3Bought = true;
+                        storeMessage=1; //success
+                        nextPurchase = nextPurchase + 60;
+                    }
+                }
             }
 
             //Key Events
@@ -1322,6 +1372,27 @@ public class FinalProject extends Game{
                 }
             }
         }
+        else if (building == 3 && level == 3) {
+            if(gice1Bought==false) {
+                gice1.draw(g);
+            }
+            if(gice2Bought==false) {
+                gice2.draw(g);
+            }
+            if(gice3Bought==false) {
+                gice3.draw(g);
+            }
+            payCredit.draw(g);
+
+            if(storeMessage!=0){
+                if(storeMessage==1){
+                    storeSuccess.draw(g);
+                }
+                else{
+                    storeError.draw(g);
+                }
+            }
+        }
 
         //level up message
         if(levelUp==true){
@@ -1354,6 +1425,17 @@ public class FinalProject extends Game{
             }
             if(pencilBought==true){
                 pencilIcon.draw(g);
+            }
+        }
+        else if (level2Done && level3Done == false) {
+            if(gice1Bought==true){
+                gice1icon.draw(g);
+            }
+            if(gice2Bought==true){
+                gice2icon.draw(g);
+            }
+            if(gice3Bought==true){
+                gice3icon.draw(g);
             }
         }
 
