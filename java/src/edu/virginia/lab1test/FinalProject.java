@@ -557,7 +557,17 @@ public class FinalProject extends Game{
                     }
                 }
                 if(this.collidesWith(npc3)&&level==3&&building==0&&state==2){
-                    showtask3=true;
+                    if(gice1Bought==true||gice2Bought==true||gice3Bought==true) {
+                        //LEVEL UP
+                        level3Done = true;
+                        nextPurchase = 0;
+                        levelUp = true;
+                        level = 3;
+                        levelDisp.setImage(updateProgress(level));
+                    }
+                    else{
+                        showtask3=true;
+                    }
                 }
 
                 //building collisions
