@@ -20,12 +20,15 @@ public class FinalProject extends Game{
     private DisplayObject levelIcon;
     private DisplayObject cashIcon;
     private DisplayObject accountIcon;
+    private DisplayObject creditIcon;
     private DisplayObject levelDisp;
     private DisplayObject cashDisp;
     private DisplayObject accountDisp;
+    private DisplayObject creditDisp;
     private int level;
     private int cashBal;
     private int accountBal;
+    private int creditBal;
 
     //back button
     private DisplayObject backbutton;
@@ -157,7 +160,7 @@ public class FinalProject extends Game{
         slideNum = 0;
         nextSlide = false;
         city1Slides = 15; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
-        city2Slides = 0; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
+        city2Slides = 6; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
 
         //set bank variables
         bankScreen = 0;
@@ -176,6 +179,7 @@ public class FinalProject extends Game{
         level = 1;
         cashBal = 0;
         accountBal = 0;
+        creditBal = 0;
 
         //INITIALIZE ALL OBJECTS
         //background object: update image based on state and building variables
@@ -277,20 +281,24 @@ public class FinalProject extends Game{
         levelIcon = new DisplayObject("level icon","buildingsIcons"+File.separator+"level.png");
         cashIcon = new DisplayObject("cash icon","buildingsIcons"+File.separator+"cashicon.png");
         accountIcon = new DisplayObject("account icon","buildingsIcons"+File.separator+"balanceicon.png");
-        levelIcon.setPosition(new Point(10, 10));
-        cashIcon.setPosition(new Point(110, 10));
-        accountIcon.setPosition(new Point(240, 2));
+        creditIcon = new DisplayObject("credit icon","buildingsIcons"+File.separator+"creditcard.png");
+        levelIcon.setPosition(new Point(5,10));
+        cashIcon.setPosition(new Point(80, 13));
+        accountIcon.setPosition(new Point(184, 0));
+        creditIcon.setPosition((new Point(268, -12)));
         //top progress bar values
         levelDisp = new DisplayObject("level display");
         cashDisp = new DisplayObject("cash display");
         accountDisp = new DisplayObject("account display");
+        creditDisp = new DisplayObject("credit display");
         levelDisp.setImage(updateProgress(level));
         cashDisp.setImage(updateProgress(cashBal));
         accountDisp.setImage(updateProgress(accountBal));
-        levelDisp.setPosition(new Point(80, 25));
-        cashDisp.setPosition(new Point(180, 25));
-        accountDisp.setPosition(new Point(310, 25));
-
+        creditDisp.setImage(updateProgress(0));
+        levelDisp.setPosition(new Point(60, 25));
+        cashDisp.setPosition(new Point(150, 25));
+        accountDisp.setPosition(new Point(254, 25));
+        creditDisp.setPosition(new Point(360, 25));
         //back button
         backbutton = new DisplayObject("back button", "buildingsIcons" + File.separator+"backbutton.png");
         backbutton.setPosition(new Point(770, 600));
@@ -417,6 +425,7 @@ public class FinalProject extends Game{
     public void update(ArrayList<Integer> pressedKeys){
         super.update(pressedKeys);
 
+            System.out.println("bankScreen: " + this.bankScreen + "\t state: " + this.state);
             //Movement of mario
             if (mario != null) mario.update(pressedKeys);
             if (pressedKeys.isEmpty() && (mario != null)) {
@@ -452,7 +461,7 @@ public class FinalProject extends Game{
                     this.setBackground();
                     mario.setPosition(new Point(100, 600));
                 }
-                else if(mario!=null&& city2!=null&& this.collidesWith(city2)){
+                else if(mario!=null&& city2!=null&& this.collidesWith(city2) && this.level1Done && this.level2Done){
                     state = 2;
                     this.setBackground();
                     mario.setPosition(new Point(100, 600));
@@ -531,12 +540,14 @@ public class FinalProject extends Game{
                         show2Fail = false;
                         showtask3=false;
                     } else if (this.collidesWith(tutorial)) {
-                        building = 4;
-                        this.setBackground();
-                        showtask1=false;
-                        showtask2=false;
-                        show2Fail = false;
-                        showtask3=false;
+                        if (level != 3) {
+                            building = 4;
+                            this.setBackground();
+                            showtask1 = false;
+                            showtask2 = false;
+                            show2Fail = false;
+                            showtask3 = false;
+                        }
                     }
                 }
                 else if(building==3&&level==1){ //STORE COLLISIONS FOR LEVEL 1
@@ -627,12 +638,12 @@ public class FinalProject extends Game{
             //Key Events
             if (pressedKeys.contains(KeyEvent.VK_UP)) {
                 mario.setPosition(new Point(mario.getPosition().x,
-                        mario.getPosition().y - 2));
+                        mario.getPosition().y - 5));
                 mario.animate("backWalk");
             }
             if (pressedKeys.contains(KeyEvent.VK_DOWN)) {
                 mario.setPosition(new Point(mario.getPosition().x,
-                        mario.getPosition().y + 2));
+                        mario.getPosition().y + 5));
                 mario.animate("frontWalk");
             }
             if (pressedKeys.contains(KeyEvent.VK_LEFT)) {
@@ -672,7 +683,7 @@ public class FinalProject extends Game{
 
                 //else mario moves as normal
                 else {
-                    mario.setPosition(new Point(mario.getPosition().x - 2,
+                    mario.setPosition(new Point(mario.getPosition().x - 5,
                             mario.getPosition().y));
                     mario.animate("leftWalk");
                 }
@@ -715,7 +726,7 @@ public class FinalProject extends Game{
 
                 //else mario moves as normal
                 else {
-                    mario.setPosition(new Point(mario.getPosition().x + 2,
+                    mario.setPosition(new Point(mario.getPosition().x + 5,
                             mario.getPosition().y));
                     mario.animate("rightWalk");
                 }
@@ -1224,6 +1235,8 @@ public class FinalProject extends Game{
             cashDisp.draw(g);
             accountIcon.draw(g);
             accountDisp.draw(g);
+            creditIcon.draw(g);
+            creditDisp.draw(g);
         }
 
         //Draw back button
