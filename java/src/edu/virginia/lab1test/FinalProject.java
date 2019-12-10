@@ -41,6 +41,7 @@ public class FinalProject extends Game{
     //levelup messages
     private DisplayObject levelUp1;
     private DisplayObject levelUp2;
+    private DisplayObject levelUp3;
     private boolean levelUp;
 
 
@@ -59,16 +60,19 @@ public class FinalProject extends Game{
     private DisplayObject npc1;
     private DisplayObject npc2;
     private DisplayObject npc3;
+    private DisplayObject npc4;
 
     //Message objects
     private DisplayObject msg1;
     private DisplayObject msg2;
     private DisplayObject msg2Fail;
     private DisplayObject msg3;
+    private DisplayObject msg4;
     private boolean showtask1;
     private boolean showtask2;
     private boolean show2Fail;
     private boolean showtask3;
+    private boolean showtask4;
 
     //Payment option objects
     private DisplayObject payCash;
@@ -208,31 +212,38 @@ public class FinalProject extends Game{
         //Level Up messages
         levelUp1 = new DisplayObject("lu1", "levelUp"+File.separator+"level1.jpg");
         levelUp2 = new DisplayObject("lu2", "levelUp"+File.separator+"level2.jpg");
+        levelUp3 = new DisplayObject("lu3", "levelUp"+File.separator+"level3.jpg");
         levelUp1.setPosition(new Point(150, 0));
         levelUp2.setPosition(new Point(150, 0));
+        levelUp3.setPosition(new Point(150, 0));
         levelUp = false;
 
         //NPC objects
         npc1 = new DisplayObject("npc1", "NPC"+File.separator+"1.png");
         npc2 = new DisplayObject("npc2", "NPC"+File.separator+"2.png");
         npc3 = new DisplayObject("npc3", "NPC"+File.separator+"3.png");
+        npc4 = new DisplayObject("npc4", "NPC"+File.separator+"3.png");
         npc1.setPosition(new Point(300, 550));
         npc2.setPosition(new Point(300, 550));
         npc3.setPosition(new Point(300, 550));
+        npc4.setPosition(new Point(300, 550));
 
         //message objects
         msg1 = new DisplayObject("msg1", "messages"+File.separator+"1.png");
         msg2 = new DisplayObject("msg2", "messages"+File.separator+"2.png");
         msg2Fail = new DisplayObject("msg2Fail", "messages"+ File.separator+"2a.png");
         msg3 = new DisplayObject("msg3", "messages"+File.separator+"3.png");
+        msg4 = new DisplayObject("msg4", "messages"+File.separator+"4.png");
         msg1.setPosition(new Point(325, 520));
         msg2.setPosition(new Point(325, 520));
         msg2Fail.setPosition(new Point(325, 520));
         msg3.setPosition(new Point(325, 520));
+        msg4.setPosition(new Point(325, 520));
         showtask1=false;
         showtask2=false;
         show2Fail = false;
         showtask3=false;
+        showtask4=false;
 
         //store messages
         storeError = new DisplayObject("storeError", "store"+File.separator+"error.jpg");
@@ -469,7 +480,6 @@ public class FinalProject extends Game{
     public void update(ArrayList<Integer> pressedKeys){
         super.update(pressedKeys);
 
-            System.out.println("q1,q2,q3 city2: " + this.q1City2 + "" + this.q2City2 + "" + this.q3City2 + "\t state: " + this.state);
             //Movement of mario
             if (mario != null) mario.update(pressedKeys);
             if (pressedKeys.isEmpty() && (mario != null)) {
@@ -523,6 +533,7 @@ public class FinalProject extends Game{
                     showtask2=false;
                     show2Fail = false;
                     showtask3=false;
+                    showtask4=false;
                 }
 
                 //npc collisions
@@ -562,12 +573,15 @@ public class FinalProject extends Game{
                         level3Done = true;
                         nextPurchase = 0;
                         levelUp = true;
-                        level = 3;
+                        level = 4;
                         levelDisp.setImage(updateProgress(level));
                     }
                     else{
                         showtask3=true;
                     }
+                }
+                if(this.collidesWith(npc3)&&level==4&&building==0&&state==2){
+                        showtask4=true;
                 }
 
                 //building collisions
@@ -579,6 +593,7 @@ public class FinalProject extends Game{
                         showtask2=false;
                         show2Fail = false;
                         showtask3=false;
+                        showtask4=false;
                     } else if (this.collidesWith(bank)) {
                         building = 2;
                         this.setBackground();
@@ -586,6 +601,7 @@ public class FinalProject extends Game{
                         showtask2=false;
                         show2Fail = false;
                         showtask3=false;
+                        showtask4=false;
                     } else if (this.collidesWith(shop)) {
                         building = 3;
                         this.setBackground();
@@ -593,6 +609,7 @@ public class FinalProject extends Game{
                         showtask2=false;
                         show2Fail = false;
                         showtask3=false;
+                        showtask4=false;
                     } else if (this.collidesWith(tutorial)) {
                         building = 4;
                         this.setBackground();
@@ -600,6 +617,7 @@ public class FinalProject extends Game{
                         showtask2 = false;
                         show2Fail = false;
                         showtask3 = false;
+                        showtask4=false;
                     }
                 }
                 else if(building==3&&level==1){ //STORE COLLISIONS FOR LEVEL 1
@@ -829,7 +847,7 @@ public class FinalProject extends Game{
             if(pressedKeys.contains(KeyEvent.VK_A)){
 
                 //BANK
-                if (building==2 && bankPress==false && (bankScreen==0||bankScreen==1||bankScreen==2)){
+                if (building==2 && bankPress==false && (bankScreen==0||bankScreen==1||bankScreen==2||bankScreen==3)){
                     bankPress = true;
                     if (bankScreen == 0){ //home screen
                         bankScreen = 1; //set to deposit
@@ -845,6 +863,19 @@ public class FinalProject extends Game{
                             accountBal = accountBal + 1;
                             cashDisp.setImage(updateProgress(cashBal));
                             accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else if (bankScreen == 3) { // pay bills
+                        if (accountBal < 1) { // error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        } else {
+                            accountBal = accountBal - 1;
+                            creditBal = creditBal - 1;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            creditDisp.setImage(updateProgress(creditBal));
                             bankScreen = 4;
                             background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
                         }
@@ -949,7 +980,7 @@ public class FinalProject extends Game{
             if(pressedKeys.contains(KeyEvent.VK_B)){
 
                 //BANK
-                if (building==2 && bankPress==false && (bankScreen==0||bankScreen==1||bankScreen==2)){
+                if (building==2 && bankPress==false && (bankScreen==0||bankScreen==1||bankScreen==2||bankScreen==3)){
                     bankPress = true;
                     if (bankScreen == 0){ //home screen
                         bankScreen = 2; //set to withdraw
@@ -965,6 +996,19 @@ public class FinalProject extends Game{
                             accountBal = accountBal + 2;
                             cashDisp.setImage(updateProgress(cashBal));
                             accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else if (bankScreen == 3) { // pay bills
+                        if (accountBal < 2) { // error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        } else {
+                            accountBal = accountBal - 2;
+                            creditBal = creditBal - 2;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            creditDisp.setImage(updateProgress(creditBal));
                             bankScreen = 4;
                             background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
                         }
@@ -1071,7 +1115,7 @@ public class FinalProject extends Game{
             if(pressedKeys.contains(KeyEvent.VK_C)){
 
                 //BANK
-                if (building==2 && bankPress==false && (bankScreen==0||bankScreen==1||bankScreen==2)){
+                if (building==2 && bankPress==false && (bankScreen==0||bankScreen==1||bankScreen==2||bankScreen==3)){
                     bankPress = true;
                     if (bankScreen == 0){ //home screen
                         bankScreen = 3; //set to pay bills
@@ -1087,6 +1131,19 @@ public class FinalProject extends Game{
                             accountBal = accountBal + 5;
                             cashDisp.setImage(updateProgress(cashBal));
                             accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else if (bankScreen == 3) { // pay bills
+                        if (accountBal < 5) { // error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        } else {
+                            accountBal = accountBal - 5;
+                            creditBal = creditBal - 5;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            creditDisp.setImage(updateProgress(creditBal));
                             bankScreen = 4;
                             background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
                         }
@@ -1187,7 +1244,7 @@ public class FinalProject extends Game{
 
             if(pressedKeys.contains(KeyEvent.VK_D)){
                 //BANK
-                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2||bankScreen==3)){
                     bankPress = true;
                     if (bankScreen == 1){ //deposit
                         if(cashBal < 10){ //error
@@ -1199,6 +1256,19 @@ public class FinalProject extends Game{
                             accountBal = accountBal + 10;
                             cashDisp.setImage(updateProgress(cashBal));
                             accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else if (bankScreen == 3) { // pay bills
+                        if (accountBal < 10) { // error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        } else {
+                            accountBal = accountBal - 10;
+                            creditBal = creditBal - 10;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            creditDisp.setImage(updateProgress(creditBal));
                             bankScreen = 4;
                             background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
                         }
@@ -1222,7 +1292,7 @@ public class FinalProject extends Game{
 
             if(pressedKeys.contains(KeyEvent.VK_E)){
                 //BANK
-                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2||bankScreen==3)){
                     bankPress = true;
                     if (bankScreen == 1){ //deposit
                         if(cashBal < 20){ //error
@@ -1234,6 +1304,19 @@ public class FinalProject extends Game{
                             accountBal = accountBal + 20;
                             cashDisp.setImage(updateProgress(cashBal));
                             accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else if (bankScreen == 3) { // pay bills
+                        if (accountBal < 20) { // error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        } else {
+                            accountBal = accountBal - 20;
+                            creditBal = creditBal - 20;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            creditDisp.setImage(updateProgress(creditBal));
                             bankScreen = 4;
                             background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
                         }
@@ -1257,7 +1340,7 @@ public class FinalProject extends Game{
 
             if(pressedKeys.contains(KeyEvent.VK_F)){
                 //BANK
-                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2||bankScreen==3)){
                     bankPress = true;
                     if (bankScreen == 1){ //deposit
                         if(cashBal < 50){ //error
@@ -1269,6 +1352,19 @@ public class FinalProject extends Game{
                             accountBal = accountBal + 50;
                             cashDisp.setImage(updateProgress(cashBal));
                             accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else if (bankScreen == 3) { // pay bills
+                        if (accountBal < 50) { // error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        } else {
+                            accountBal = accountBal - 50;
+                            creditBal = creditBal - 50;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            creditDisp.setImage(updateProgress(creditBal));
                             bankScreen = 4;
                             background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
                         }
@@ -1292,7 +1388,7 @@ public class FinalProject extends Game{
 
             if(pressedKeys.contains(KeyEvent.VK_G)){
                 //BANK
-                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2||bankScreen==3)){
                     bankPress = true;
                     if (bankScreen == 1){ //deposit
                         if(cashBal < 100){ //error
@@ -1304,6 +1400,19 @@ public class FinalProject extends Game{
                             accountBal = accountBal + 100;
                             cashDisp.setImage(updateProgress(cashBal));
                             accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else if (bankScreen == 3) { // pay bills
+                        if (accountBal < 100) { // error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        } else {
+                            accountBal = accountBal - 100;
+                            creditBal = creditBal - 100;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            creditDisp.setImage(updateProgress(creditBal));
                             bankScreen = 4;
                             background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
                         }
@@ -1327,7 +1436,7 @@ public class FinalProject extends Game{
 
             if(pressedKeys.contains(KeyEvent.VK_H)){
                 //BANK
-                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2||bankScreen==3)){
                     bankPress = true;
                     if (bankScreen == 1){ //deposit
                         if(cashBal < 500){ //error
@@ -1339,6 +1448,19 @@ public class FinalProject extends Game{
                             accountBal = accountBal + 500;
                             cashDisp.setImage(updateProgress(cashBal));
                             accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else if (bankScreen == 3) { // pay bills
+                        if (accountBal < 500) { // error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        } else {
+                            accountBal = accountBal - 500;
+                            creditBal = creditBal - 500;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            creditDisp.setImage(updateProgress(creditBal));
                             bankScreen = 4;
                             background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
                         }
@@ -1362,7 +1484,7 @@ public class FinalProject extends Game{
 
             if(pressedKeys.contains(KeyEvent.VK_I)){
                 //BANK
-                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2)){
+                if (building==2 && bankPress==false && (bankScreen==1||bankScreen==2||bankScreen==3)){
                     bankPress = true;
                     if (bankScreen == 1){ //deposit
                         if(cashBal < 1000){ //error
@@ -1374,6 +1496,19 @@ public class FinalProject extends Game{
                             accountBal = accountBal + 1000;
                             cashDisp.setImage(updateProgress(cashBal));
                             accountDisp.setImage(updateProgress(accountBal));
+                            bankScreen = 4;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
+                        }
+                    }
+                    else if (bankScreen == 3) { // pay bills
+                        if (accountBal < 1000) { // error
+                            bankScreen = 5;
+                            background.setImage(background.readImage("bankScreens" + File.separator + "error.jpg"));
+                        } else {
+                            accountBal = accountBal - 1000;
+                            creditBal = creditBal - 1000;
+                            accountDisp.setImage(updateProgress(accountBal));
+                            creditDisp.setImage(updateProgress(creditBal));
                             bankScreen = 4;
                             background.setImage(background.readImage("bankScreens" + File.separator + "update.jpg"));
                         }
@@ -1471,13 +1606,14 @@ public class FinalProject extends Game{
             if(level==1&&state==1){ npc1.draw(g); }
             else if(level==2&&state==1){ npc2.draw(g); }
             else if (level==3&&state==2){ npc3.draw(g); }
+            else if (level==4&&state==2){ npc4.draw(g); }
 
             //draw messages
             if(showtask1==true){ msg1.draw(g); }
             else if(showtask2==true){ msg2.draw(g); }
             else if(show2Fail==true){ msg2Fail.draw(g); }
             else if (showtask3==true){ msg3.draw(g); }
-
+            else if (showtask4==true) { msg4.draw(g); }
             //draw buildings
             if(office!=null){
                 office.draw(g);
@@ -1562,6 +1698,9 @@ public class FinalProject extends Game{
             }
             if (level2Done == true) {
                 levelUp2.draw(g);
+            }
+            if (level3Done == true) {
+                levelUp3.draw(g);
             }
         }
 
