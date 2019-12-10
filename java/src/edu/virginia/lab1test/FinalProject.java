@@ -285,7 +285,7 @@ public class FinalProject extends Game{
         levelIcon.setPosition(new Point(5,10));
         cashIcon.setPosition(new Point(80, 13));
         accountIcon.setPosition(new Point(184, 0));
-        creditIcon.setPosition((new Point(268, -12)));
+        creditIcon.setPosition((new Point(285, 22)));
         //top progress bar values
         levelDisp = new DisplayObject("level display");
         cashDisp = new DisplayObject("cash display");
@@ -298,7 +298,7 @@ public class FinalProject extends Game{
         levelDisp.setPosition(new Point(60, 25));
         cashDisp.setPosition(new Point(150, 25));
         accountDisp.setPosition(new Point(254, 25));
-        creditDisp.setPosition(new Point(360, 25));
+        creditDisp.setPosition(new Point(345, 25));
         //back button
         backbutton = new DisplayObject("back button", "buildingsIcons" + File.separator+"backbutton.png");
         backbutton.setPosition(new Point(770, 600));
