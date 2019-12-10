@@ -171,7 +171,7 @@ public class FinalProject extends Game{
         slideNum = 0;
         nextSlide = false;
         city1Slides = 15; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
-        city2Slides = 6; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
+        city2Slides = 7; //STATIC, DOES NOT CHANGE, SET TO HOW MANY SLIDES THERE ARE
 
         //set bank variables
         bankScreen = 0;
